@@ -39,7 +39,6 @@ a:hover {
 		</div>
 	</div> 
 	<form name="select_ingredient" method="post">
-		<input type="hidden" name="rcpNum" value="${recipt.rcpnum }">
 		<input type="hidden" name="productName" value="${sale.productname }">
 		<input type="hidden" name="price" value="${sale.price }">
 		<input type="hidden" name="thumbnail" value="${sale.thumbnail }">
@@ -52,7 +51,7 @@ a:hover {
 					</a>
 				</div>
 				<div class="col-lg-6 product-details pl-md-5 ftco-animate">
-					<h3>${recipt.title }</h3>
+					<h3>${sale.productname }</h3>
 					<div class="rating d-flex">
 						<p class="text-left mr-4">
 							<a href="#" class="mr-2">5.0</a> <a href="#"><span
@@ -121,7 +120,7 @@ a:hover {
 					<div class="btn_choice_box">
                                 <div>
                                     <button type="submit" id="cartBtn" class="btn_add_cart" formaction="${pageContext.request.contextPath}/shopping/addcart"><img src="//recipe1.ezmember.co.kr/img/mobile/icon_basket.png" width="24" style="margin:-4px 5px 0 0; vertical-align: middle;">장바구니</button>
-                                    <button type="submit" id="wishBtn" class="btn_add_wish" formaction="${pageContext.request.contextPath}/shopping/regist_jjim" onclick="jjim();">
+                                    <button type="submit" id="wishBtn" class="btn_add_wish" formaction="${pageContext.request.contextPath}/shopping/regist_jjim?saleNum=${sale.saleNum}" onclick="jjim();">
                                     <img src="//recipe1.ezmember.co.kr/img/mobile/icon_scrap3.png" width="26" style="margin:-4px 5px 0 0; vertical-align: middle;" >찜하기</button>
                                   
                                 </div>
@@ -135,7 +134,7 @@ a:hover {
 			</div>
 			<div class="view_step">
 				<div class="view_tag">
-			<c:forTokens items="${recipt.hashtag }" delims="#" var="item">
+			<c:forTokens items="${sale.hashtag }" delims="#" var="item">
     <a href="#">#${item}</a>
    </c:forTokens>
 				
@@ -301,7 +300,12 @@ a:hover {
 </body>
 <script type="text/javascript">
 function jjim(){
-	alert("찜목록에 등록 되었습니다.");
+	if(${memNum == null}){
+		alert("로그인 해주세요")
+	}else{
+		alert("찜목록에 등록 되었습니다.");	
+	}
+	
 }
 
 function count_qty(mark){
