@@ -201,7 +201,7 @@ document.location.href = url;   --%>
     			</c:forEach>
     		</ul>
     		<ul class="small_sort">
-    			<li>
+    			
     				
     		</ul>
     	</fieldset>
