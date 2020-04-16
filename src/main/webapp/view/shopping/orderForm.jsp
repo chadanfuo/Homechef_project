@@ -435,7 +435,7 @@ div.right {
     	}
     	alert("결제전");
         paying();
-       	alert("결제후");
+       //	alert("결제후");
       	
         
         
