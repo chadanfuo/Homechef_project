@@ -27,8 +27,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import exception.DuplicateldException;
 import model.Brand;
+import model.Ingredient;
 import model.Member;
 import model.Nutrient;
+import model.Rcp;
 import service.BrandRepository;
 import service.MybatisRcpDaoMysql;
 import service.ShoppingRepository;
@@ -57,6 +59,21 @@ public class IndexController {
 
 		session.setAttribute("cartcount", cartcount);
 		System.out.println("====================");
+		
+		List<Rcp> foodnames =dbPro.rcpAllList();
+		List<Ingredient> ingredients =dbPro.getIngredient();
+		
+		HashSet<String> keywords = new HashSet<String>();
+		for(int i=0;i<foodnames.size();i++){
+			Rcp foodname=foodnames.get(i);
+			keywords.add(foodname.getFoodname());
+		}
+		for(int i=0;i<ingredients.size();i++){
+			Ingredient ingredient=ingredients.get(i);
+			keywords.add(ingredient.getIngredient());
+		}
+		
+		model.addAttribute("keywords", keywords);
 
 	}
 	

@@ -73,6 +73,44 @@ $(document).ready(function(){
 
 });
 </script>
+
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
+  <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+  <script> var auto = jQuery.noConflict(); </script>
+  <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+<style>
+.ui-autocomplete {
+max-height: 200px;
+overflow-y: auto;
+/* prevent horizontal scrollbar */
+overflow-x: hidden;
+}
+/* IE 6 doesn't support max-height
+* we use height instead, but this forces the menu to always be this tall
+*/
+* html .ui-autocomplete {
+height: 200px;
+}
+</style>
+  
+  <script>
+  auto(function() {
+    var keywords = [
+    	<c:forEach var="keywords" items="${keywords}">
+		'${keywords}',
+		</c:forEach>
+    ];
+    auto( ".form-control" ).autocomplete({
+      source: keywords,
+      max: 10,
+      focus: function(event, ui) {
+          return false;
+      }
+    });
+    
+  });
+  </script>
+  
 </head>
 
 <body class="goto-here">

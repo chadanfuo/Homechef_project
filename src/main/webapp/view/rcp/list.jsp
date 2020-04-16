@@ -75,7 +75,12 @@
     white-space: nowrap;
     text-overflow: ellipsis;
 }
-
+a:link{
+	color:black;
+}
+a:visited{
+	color:black;
+}
 .search_cate {
     background: #fff;
     padding: 16px 25px 17px;
@@ -265,6 +270,13 @@ a {
 .selected { background:red }
 </style>
 
+<c:if test='${keyword.equals("") }'>
+   <script>
+      alert("상품을 검색하세요");
+      history.go(-1);
+   </script>
+</c:if>
+
 <body>
 <div class="container">
 	<div class="search_cate">
@@ -340,7 +352,7 @@ a {
 			var url = document.location.href.split("?")[location.href.split("?").length - 1].split("&");
 			if (url[0] == "sorting=latest") {
 				atag[0].className += " selected";
-			} else if (url[0] == "cateNum=1") {
+			} else if (url[0] == "sorting=readCount") {
 				atag[1].className += " selected";
 			}
 		}		
@@ -353,7 +365,7 @@ a {
 				<a href="<%=request.getContextPath()%>/rcp/list?sorting=latest&cateNum=${cateNum}">최신순</a>
 			</li>
 			<li class="sorting">
-				<a href="<%=request.getContextPath()%>/rcp/list?cateNum=${cateNum}">조회순</a>
+				<a href="<%=request.getContextPath()%>/rcp/list?sorting=readCount&cateNum=${cateNum}">조회순</a>
 			</li>
 		</ul>
 		</c:if>
