@@ -198,7 +198,8 @@ height: 200px;
 							<li class="nav-item"><a
 					href="<%=request.getContextPath()%>/chef" class="nav-link"><spring:message
 							code="nav.chef" /></a></li>
-                    <li class="nav-item cta cta-colored"><a href="${pageContext.request.contextPath }/shopping/cartview" class="nav-link"><span class="icon-shopping_cart"></span>[0]</a></li>
+                    <li class="nav-item cta cta-colored"><a href="${pageContext.request.contextPath }/shopping/cartview" class="nav-link"><span class="icon-shopping_cart"></span>[
+                    <c:if test="${! empty authUser}">${cartcount}</c:if><c:if test="${empty authUser}">0</c:if> ]</a></li>
 
                 </ul>
             </div>

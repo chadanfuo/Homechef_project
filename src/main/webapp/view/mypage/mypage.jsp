@@ -228,6 +228,12 @@ a:visited{
 			</p>
 			<div class="btn_area">
 				<c:if test="${loginNum==member.memNum}">
+				<button onclick="javascript:window:location='<%=request.getContextPath()%>/shopping/orderinfo'">
+				주문정보
+				</button>
+				<button onclick="javascript:window:location='<%=request.getContextPath()%>/shopping/jjimlist'">
+				찜목록
+				</button>
 				<button onclick="javascript:window:location='<%=request.getContextPath()%>/member/modifyForm?memNum=${member.memNum}'">
 				프로필 수정
 				</button>
