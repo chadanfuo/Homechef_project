@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,19 +17,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import model.Cart;
 import model.Ingredient;
+import model.Jjim;
 import model.MemAddress;
 import model.Member;
 import model.OrderInfo;
 import model.OrderProduct;
 import model.Rcp;
 import model.Sale;
+import model.Salecategory;
 import service.MybatisRcpDaoMysql;
 import service.ShoppingRepository;
 
@@ -52,18 +57,13 @@ public class ShoppingController {
    }
 
    @RequestMapping(value = "list") // 맨끝단의 url만 가지고 옴, get방식으로 한다.
-   public String reciptview(Model model) {
+   public String reciptview(@RequestParam("saleNum")int saleNum, Model model) {
       // TODO Auto-generated method stub
       
-      int rcpNum = 1;// 나중에 get값으로 받음
+      Sale sale = service.getSale(saleNum);
       
-      List<Ingredient> ingredients = service.getIngredient(rcpNum);
-      Sale sale = service.getSale(rcpNum);
-      System.out.println("price : "+sale);
+      System.out.println("sale : "+sale);
       
-      Rcp rcp = service.getRcp(rcpNum);
-      model.addAttribute("recipt", rcp);
-      model.addAttribute("ingredients", ingredients);
       model.addAttribute("sale", sale);
 
       return "shopping/goodsview";
@@ -89,11 +89,31 @@ public class ShoppingController {
       return "redirect:/shopping/cartview";
       
    }
+   
+   @RequestMapping(value = "addcart") // 맨끝단의 url만 가지고 옴, get방식으로 한다.
+   public String addcart_get(@RequestParam("price")int price, @RequestParam("productName")String productName, @RequestParam("thumbnail")String thumbnail, HttpSession session) {
+      // TODO Auto-generated method stub
+	   if(session.getAttribute("memNum")==null){
+	    	  return "redirect:/member/login";
+	      }
+	   Cart cart = new Cart(); 
+      int memNo = (int) session.getAttribute("memNum");
+      cart.setMemNum(memNo);
+      cart.setPrice(price);
+      cart.setProductName(productName);
+      cart.setThumbnail(thumbnail);
+      cart.setQty(1);
+      service.insertCart(cart);
+      return "redirect:/shopping/cartview";
+      
+   }
   
    @RequestMapping(value = "cartview", method=RequestMethod.GET) // 맨끝단의 url만 가지고 옴, get방식으로 한다.
    public String cartview(HttpSession session, Model m){
       // TODO Auto-generated method stub
-      
+      if(session.getAttribute("memNum")==null){
+    	  return "redirect:/member/login";
+      }
       int memNo = (int) session.getAttribute("memNum");
       List<Cart> cartlist = service.getCart(memNo);
       System.out.println(memNo);
@@ -119,26 +139,66 @@ public class ShoppingController {
    }
    
    @RequestMapping(value = "regist_jjim", method=RequestMethod.POST)
-   public String regist_jjim(HttpServletRequest request, Model m) throws Exception {
+   public String regist_jjim(HttpSession session, @RequestParam("saleNum")int saleNum , Model m) throws Exception {
       // TODO Auto-generated method stub
-      HttpSession session = request.getSession();
-      
-      String values = request.getParameter("rcpNum");
-     int check = service.registjjim(Integer.parseInt(values),(int)session.getAttribute("memNum"));
+	if(session.getAttribute("memNum")==null){
+	    	  return "redirect:/member/login";
+	   }
+     int check = service.registjjim(saleNum, (int)session.getAttribute("memNum"));
      System.out.println("check " + check);
      System.out.println("dddd : "+(int)session.getAttribute("memNum"));
      if(check >= 1){
-        System.out.println( values+"-- 성공");
+        System.out.println( saleNum+"-- 성공");
      }else{
-        System.out.println( values+"-- 중복");
+        System.out.println( saleNum+"-- 중복");
      }
-      
+      return "redirect:/shopping/list?saleNum="+saleNum;
+   }
+   
+   @RequestMapping(value = "regist_jjim")
+   public String regist_jjim_get(HttpSession session, @RequestParam("saleNum")int saleNum , Model m) throws Exception {
+      // TODO Auto-generated method stub
+	if(session.getAttribute("memNum")==null){
+	    	  return "redirect:/member/login";
+	   }
+     int check = service.registjjim(saleNum, (int)session.getAttribute("memNum"));
+     if(check >= 1){
+        System.out.println( saleNum+"-- 성공");
+     }else{
+        System.out.println( saleNum+"-- 중복");
+     }
+      return "redirect:/shopping/jjimlist";
+   }
+   
+   
+   @RequestMapping(value = "jjimlist")
+   public String jjimlist(HttpSession session, Model m) throws Exception {
+      // TODO Auto-generated method stub
+	   if(session.getAttribute("memNum")==null){
+	    	  return "redirect:/member/login";
+	   }
+	 List<Jjim> jjimlist = service.getJjimlist((int)session.getAttribute("memNum"));
+	 m.addAttribute("jjimlist", jjimlist);
 
-      return "redirect:/shopping/list";
+      return "/shopping/Wishlist";
+   }
+   
+   @RequestMapping(value = "jjim_delete", method=RequestMethod.POST)
+   public String jjim_delete(HttpServletRequest request) throws Exception {
+      // TODO Auto-generated method stub
+      
+      String[] values = request.getParameterValues("jjim");
+      for(String str : values){
+         
+         int check = service.deletejjimvalue(Integer.parseInt(str));
+         System.out.println(str+" : "+check);
+      }
+      
+      return "redirect:/shopping/jjimlist";
    }
    
    @RequestMapping(value = "order", method=RequestMethod.POST) // 
-	public String order(HttpServletRequest request, Model m){
+	public String order_form(HttpServletRequest request, Model m){
 		// TODO Auto-generated method stub
 		List<Cart> cartlist = new ArrayList<>();
 		List<MemAddress> address = new ArrayList<>();
@@ -174,8 +234,8 @@ public class ShoppingController {
 		return array[index];
 	}
 	
-	@RequestMapping(value = "complete_order") 
-	public String payment(HttpServletRequest request, @RequestParam("select")int select, @RequestParam(value="sel_address", required=false, defaultValue="-1")int sel_address, @RequestParam(value="addradd", required=false, defaultValue="0")int addradd,
+	@RequestMapping(value = "complete_order", method=RequestMethod.POST) 
+	public String order(@RequestParam("select")int select, @RequestParam(value="sel_address", required=false, defaultValue="-1")int sel_address, @RequestParam(value="addradd", required=false, defaultValue="0")int addradd,
 			int[] nums, MemAddress memaddr, OrderInfo orderinfo, OrderProduct ordpro, Model m){
 		// TODO Auto-generated method stub
 		MemAddress getmemA = new MemAddress();
@@ -197,11 +257,11 @@ public class ShoppingController {
 			orderinfo.setZipcode(address_split(memaddr.getZipcode(),select));
 			
 			if(addradd==1){
-				//service.insertMemAddr(memaddr);
+				service.insertMemAddr(memaddr);
 			}
 		}else{
 			// 기존 배송지 일경우, 주문완료된 카트들 삭제..
-			//getmemA = service.getAddress1(sel_address);
+			getmemA = service.getAddress1(sel_address);
 			orderinfo.setAddress(getmemA.getAddress());
 			orderinfo.setRecipient(getmemA.getRecipient());
 			orderinfo.setZipcode(getmemA.getZipcode());
@@ -209,7 +269,7 @@ public class ShoppingController {
 		}
 		System.out.println(addr);
 		
-		//service.insertOrderForm(orderinfo, ordpro, nums);
+		service.insertOrderForm(orderinfo, ordpro, nums);
 		
 		
 		System.out.println(memaddr);
@@ -220,6 +280,30 @@ public class ShoppingController {
 		return "shopping/orderSuccess";
 	}
 	
+	@RequestMapping(value = "complete", method=RequestMethod.POST)
+	public @ResponseBody String pa(@RequestBody String select){
+		System.out.println("complete!");
+		//System.out.println(test);
+		
+		
+		
+		System.out.println(select);
+		
+		//System.out.println(memaddr);
+		//System.out.println(orderinfo);
+		//System.out.println(ordpro);
+		
+		
+		return "shopping/orderSuccess";
+
+	}
+	@RequestMapping(value = "complete")
+	public String orderSuccess(){
+		System.out.println("complete!2");
+		return "shopping/orderSuccess";
+
+	}
+	
 	@RequestMapping("pay") // 맨끝단의 url만 가지고 옴, get방식으로 한다.
 	public String paying(@ModelAttribute("name")String name, @ModelAttribute("email")String email, @ModelAttribute("phone")String phone, @ModelAttribute("address")String address, @ModelAttribute("price")int price) {
 	      // TODO Auto-generated method stub
@@ -227,4 +311,27 @@ public class ShoppingController {
 	      return "shopping/pay";
 	      
 	}
+	
+	@RequestMapping(value = "orderinfo")
+	   public String orderinfo(HttpSession session, Model m) throws Exception {
+	      // TODO Auto-generated method stub
+		 if(session.getAttribute("memNum")==null){
+		    	  return "redirect:/member/login";
+		 }
+		 List<OrderProduct> productlist = new ArrayList<>();
+		 List<OrderInfo> orderlist = service.getorderinfolist((int)session.getAttribute("memNum"));
+		 for(OrderInfo order : orderlist){
+			 List<OrderProduct> product = service.getorderproductlist(order.getOrderNum());
+			 System.out.println(product);
+			 for(OrderProduct product1 : product){
+				 productlist.add(product1);
+			 }
+		 }
+		 System.out.println("p_list : "+productlist);
+		 
+		 m.addAttribute("orderlist", orderlist);
+		 m.addAttribute("productlist", productlist);
+
+	      return "/shopping/orderinfo";
+	   }
 }
