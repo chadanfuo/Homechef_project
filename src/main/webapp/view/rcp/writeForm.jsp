@@ -337,7 +337,7 @@
 	auto(document).on("click",".ingred_name",function(){
 		 var keywords = [
 		    	<c:forEach var="nutrients" items="${nutrients}">
-				'${nutrients}',
+				'${nutrients.food}',
 				</c:forEach>
 		    ];
 		    

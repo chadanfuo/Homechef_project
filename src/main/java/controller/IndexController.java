@@ -82,14 +82,7 @@ public class IndexController {
 	
 	@RequestMapping(value="/main")
 	public String index(Model m){
-		List<Nutrient> nutrientList =dbPro.getNutrient();
-
-		HashSet<String> nutrients = new HashSet<String>();
-
-		for(int i=0;i<nutrientList.size();i++){
-			Nutrient nutrient=nutrientList.get(i);
-			nutrients.add(nutrient.getFoodgroup());
-		}
+		List<Nutrient> nutrients =dbPro.getNutrient();
 
 		m.addAttribute("nutrients", nutrients);	
 		
