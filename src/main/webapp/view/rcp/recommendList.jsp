@@ -268,6 +268,36 @@ a {
     color: #fff;
 }
 .selected { background:red }
+.bar_result {
+    width: 1140px;
+    margin: auto;
+    margin-top: 25px;
+    border: 1px solid #e6e6e6;
+}
+.bar_result th {
+    width: 98px;
+    font-size: 15px;
+    color: #3e3e3e;
+    background-color: #fafafa;
+    border-right: 1px solid #e6e6e6;
+    text-align: center;
+    font-family: Microsoft YaHei,'NS';
+    padding: 16px 0;
+}
+.bar_result td {
+    padding: 12px 20px;
+    line-height: 2;
+}
+.bar_result span {
+    font-size: 15px;
+    color: #3e3e3e;
+    display: inline-block;
+    margin-right: 20px;
+}
+.bar_result .btn_cancel {
+	color:#74b243;
+	font-weight: bold;
+}
 </style>
 
 <c:if test='${keyword.equals("") }'>
@@ -278,9 +308,8 @@ a {
 </c:if>
 
 <body>
-<div class="container">
+<div class="container">	
 	<div class="search_cate">
-		<c:if test="${cateNum==0}">
 		<div class="cate_list">
 			<span>상황별</span>
 			<c:forEach var="division" items="${division}">
@@ -319,81 +348,55 @@ a {
 				</c:if>
 			</c:forEach>
 		</div>
-		</c:if>
-		
-		<c:if test="${cateNum!=0}">
-		<div class="category_tag">
-			<div class="tag_tit">
-				<a href="<%=request.getContextPath()%>/rcp/list?sorting=latest&cateNum=0">전체</a>>
-				<c:forEach var="division" items="${division}">
-				<a href="<%=request.getContextPath()%>/rcp/list?sorting=latest&cateNum=${division.division_num}">${division.division_name}</a>
-				</c:forEach>
-				<c:forEach var="category" items="${category}">
-				<c:if test="${cateNum==category.cateNum}">
-				><a href="<%=request.getContextPath()%>/rcp/list?sorting=latest&cateNum=${category.cateNum}">${category.cateName}</a>
-				</c:if>
-				</c:forEach>
-			</div>
-			<ul class="tag_cont">
-				<c:forEach var="category" items="${category}">
-				<li>
-					<a href="<%=request.getContextPath()%>/rcp/list?sorting=latest&cateNum=${category.cateNum}">${category.cateName}</a>
-				</li>
-				</c:forEach>
-			</ul>
-		</div>
-		</c:if>
 	</div>
 	
+	<form action="<%=request.getContextPath()%>/rcp/recommend" method="POST">
+		<table class="bar_result">
+		<tbody>
+			<tr>
+				<th>결과</th>
+				<td id="cat-result">
+					<c:forEach var="recNutrients" items="${recNutrients}">
+					<span>
+						<input type='hidden' name='foods' value='${recNutrients.nutrient_num}'>
+						${recNutrients.food}<button type="submit" class="btn_cancel">X</button>
+					</span>
+					</c:forEach>
+				</td>
+		</tbody>
+		</table>
+	</form>
 	
-	<script>
-		window.onload = function() {
-			var atag = document.querySelectorAll(".sorting");
-			var url = document.location.href.split("?")[location.href.split("?").length - 1].split("&");
-			if (url[0] == "sorting=latest") {
-				atag[0].className += " selected";
-			} else if (url[0] == "sorting=readCount") {
-				atag[1].className += " selected";
-			}
-		}		
-	</script>
 	<div class="list_title">
-		<c:if test="${keyword==null}">
-		총 <b>${rcpAllCount}</b>개의 레시피가 있습니다.	
-		<ul class="sort">
-			<li class="sorting">
-				<a href="<%=request.getContextPath()%>/rcp/list?sorting=latest&cateNum=${cateNum}">최신순</a>
-			</li>
-			<li class="sorting">
-				<a href="<%=request.getContextPath()%>/rcp/list?sorting=readCount&cateNum=${cateNum}">조회순</a>
-			</li>
-		</ul>
-		</c:if>
-		<c:if test="${keyword!=null}">
-		<b style="color: black">'${keyword}'</b> 검색결과  <b>${rcpAllCount}</b>개의 레시피가 검색되었습니다.
-		</c:if>
+		조건에 맞는 레시피가 <b>${recommendCount}</b>개 있습니다.	
 	</div>
 	
-	<ul class="lst_recipe">					
-		<c:forEach var="rcpAllList" items="${rcpAllList}">
+	<ul class="lst_recipe">		
+		<c:forEach var="recommendList" items="${recommendList}">
 		<li>
-			<a href="<%=request.getContextPath()%>/rcp/content?rcpnum=${rcpAllList.rcpnum}" data-toggle="modal" class="call_recipe">
-				<img src="<%=request.getContextPath()%>/uploadRcpFile/${rcpAllList.thumbnail}">
+			<a href="<%=request.getContextPath()%>/rcp/content?rcpnum=${recommendList.rcpnum}" data-toggle="modal" class="call_recipe">
+				<img src="<%=request.getContextPath()%>/uploadRcpFile/${recommendList.thumbnail}">
 			</a>
 			<span class="author">
-				<a href="<%=request.getContextPath()%>/member/mypage?memNum=${rcpAllList.memnum}">
-					<img src="<%=request.getContextPath()%>/uploadFile/${rcpAllList.profile}">
+				<a href="<%=request.getContextPath()%>/member/mypage?memNum=${recommendList.memnum}">
+					<img src="<%=request.getContextPath()%>/uploadFile/${recommendList.profile}">
 				</a>
 			</span>
 			<p>
-				<a href="<%=request.getContextPath()%>/rcp/content?rcpnum=${rcpAllList.rcpnum}" data-toggle="modal">
-					<br><strong>${rcpAllList.title}</strong><p>${rcpAllList.foodname}</p>
+				<a href="<%=request.getContextPath()%>/rcp/content?rcpnum=${recommendList.rcpnum}" data-toggle="modal">
+					<br><strong>${rcpAllList.title}</strong><p>${recommendList.foodname}</p>
 				</a>
 			</p>
 		</li>
 		</c:forEach>
 	</ul>	
 </div>
+
+<script>
+	$('.btn_cancel').click(function() {
+		$(this).prev().remove()
+	});
+</script>
 
 </body>
 </html>

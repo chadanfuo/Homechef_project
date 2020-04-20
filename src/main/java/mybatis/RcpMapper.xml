@@ -225,4 +225,41 @@
 		where i.INGREDIENT=n.food and rcpnum=#{rcpnum}
 	</select>
 	
+	<select id="recommend"  parameterType="java.util.ArrayList" resultType="Rcp">
+		select *
+		from Rcp r, member m
+		where r.memNum=m.memNum and 
+		        rcpnum in (select rcpnum
+		                    from (select rcpnum, LISTAGG(nutrient_num,'/') WITHIN GROUP(ORDER BY nutrient_num) AS nutrient_num
+		                          from ingredient i, nutrient n
+		                          where i.INGREDIENT=n.food
+		                          group by rcpnum)
+		                    where <foreach collection="array" item="item"  open="(" close=")" separator="and">
+							        	nutrient_num like '%'||#{item}||'%'
+							      </foreach>)
+	</select>
+	
+	<select id="recommendCount" parameterType="java.util.ArrayList" resultType="int">
+		select count(*)
+		from Rcp r, member m
+		where r.memNum=m.memNum and 
+		        rcpnum in (select rcpnum
+		                    from (select rcpnum, LISTAGG(nutrient_num,'/') WITHIN GROUP(ORDER BY nutrient_num) AS nutrient_num
+		                          from ingredient i, nutrient n
+		                          where i.INGREDIENT=n.food
+		                          group by rcpnum)
+		                    where <foreach collection="array" item="item"  open="(" close=")" separator="and">
+							        	nutrient_num like '%'||#{item}||'%'
+							      </foreach>)
+	</select>
+	
+	<select id="recNutrient" parameterType="java.util.ArrayList" resultType="Nutrient">
+		select *
+		from Nutrient
+		where nutrient_num in 
+			  <foreach collection="array" item="item"  open="(" close=")" separator=",">
+				 #{item}
+			  </foreach>
+	</select>
+	
 </mapper>

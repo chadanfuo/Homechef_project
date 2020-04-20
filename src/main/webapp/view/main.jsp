@@ -86,7 +86,7 @@ if ($('#email') != null) {
 			
 			var keywords = [
 		    	<c:forEach var="nutrients" items="${nutrients}">
-				'${nutrients.food}',
+		    	{ label: '${nutrients.food}', value: '${nutrients.nutrient_num}' },
 				</c:forEach>
 		    ];
 		    
@@ -97,16 +97,20 @@ if ($('#email') != null) {
 			          return false;
 			      },
 			      
-			      select: function (event, ui) {
+			      select: function (event, ui) {			    	  	
 						field2.find(".no-content").remove();						
 				
 						list.append(
 							  "<li>" +
-								  "<input type='hidden' name='foods[]' value='" + ui.item.value + "'>" +
+								  "<input type='hidden' name='foods' value='" + ui.item.value + "'>" +
 								  "<a href='javascript:;'><em></em>" + ui.item.label + "</a>" +
 								  "</li>"
 						  );
-					}
+					},
+					
+				close:function(event){
+					$(this).val('');
+				}
 			})
 		  });
 	
@@ -125,14 +129,14 @@ if ($('#email') != null) {
 			var field1 = rec(this).closest(".field1");
 			var field2 = field1.next(".field2");
 			var list = field2.find(".selected-ingre");
-			var id = rec(this).attr("ingre_name");
+			var id = rec(this).attr("ingre_num");
 			var name = rec(this).find("strong").html();
 			var imgHtml = rec(this).find("img").prop("outerHTML");
 		
 			field2.find(".no-content").remove();
 			field2.find(".selected-ingre").append(
 				  "<li>" +
-					  "<input type='hidden' name='foods[]' value='" + id + "'>" +
+					  "<input type='hidden' name='foods' value='" + id + "'>" +
 					  "<a href='javascript:;'><em></em>" + name + "</strong></a>" +
 					  "</li>"
 			);			
@@ -195,9 +199,7 @@ if ($('#email') != null) {
 			<h2>내가 가진 재료로 레시피 추천받기</h2>
 
 			<p>냉장고를 부탁해! 냉장고에 숨어 있는 재료로 맛있는 요리를 만들어보세요.</p>
-			<form action="https://www.haemukja.com/recipes"  id="tabs" accept-charset="UTF-8" method="get">
-				<!-- <input name="utf8" type="hidden" value="✓"> -->
-				<!-- <input type="hidden" name="sort" value="rlv"> -->
+			<form action="<%=request.getContextPath()%>/rcp/recommend"  id="tabs" accept-charset="UTF-8" method="POST">
 				<fieldset class="field1">
 					<input type="text" class="search-ingre" placeholder="재료명으로 검색해보세요." autocomplete="off">
 					<button class="btn_search">검색</button>
@@ -225,7 +227,7 @@ if ($('#email') != null) {
 					<c:forEach var="nutrients" items="${nutrients}">						
 						<c:if test="${nutrients.foodgroup.equals('곡류및그제품')}">
 							<li>
-							<a  href="javascript:;" ingre_name="${nutrients.food}">
+							<a  href="javascript:;" ingre_num="${nutrients.nutrient_num}">
 								<em></em>								
 								<strong>${nutrients.food}</strong>
 							</a> 
@@ -239,7 +241,7 @@ if ($('#email') != null) {
 					<c:forEach var="nutrients" items="${nutrients}">						
 						<c:if test="${nutrients.foodgroup.equals('감자류및전분류')}">
 							<li>
-							<a  href="javascript:;" ingre_name="${nutrients.food}">
+							<a  href="javascript:;" ingre_num="${nutrients.nutrient_num}">
 								<em></em>								
 								<strong>${nutrients.food}</strong>
 							</a> 
@@ -253,7 +255,7 @@ if ($('#email') != null) {
 					<c:forEach var="nutrients" items="${nutrients}">						
 						<c:if test="${nutrients.foodgroup.equals('당류')}">
 							<li>
-							<a  href="javascript:;" ingre_name="${nutrients.food}">
+							<a  href="javascript:;" ingre_num="${nutrients.nutrient_num}">
 								<em></em>								
 								<strong>${nutrients.food}</strong>
 							</a> 
@@ -267,7 +269,7 @@ if ($('#email') != null) {
 					<c:forEach var="nutrients" items="${nutrients}">						
 						<c:if test="${nutrients.foodgroup.equals('두류')}">
 							<li>
-							<a  href="javascript:;" ingre_name="${nutrients.food}">
+							<a  href="javascript:;" ingre_num="${nutrients.nutrient_num}">
 								<em></em>								
 								<strong>${nutrients.food}</strong>
 							</a> 
@@ -281,7 +283,7 @@ if ($('#email') != null) {
 					<c:forEach var="nutrients" items="${nutrients}">						
 						<c:if test="${nutrients.foodgroup.equals('견과류및종실류')}">
 							<li>
-							<a  href="javascript:;" ingre_name="${nutrients.food}">
+							<a  href="javascript:;" ingre_num="${nutrients.nutrient_num}">
 								<em></em>								
 								<strong>${nutrients.food}</strong>
 							</a> 
@@ -295,7 +297,7 @@ if ($('#email') != null) {
 					<c:forEach var="nutrients" items="${nutrients}">						
 						<c:if test="${nutrients.foodgroup.equals('채소류')}">
 							<li>
-							<a  href="javascript:;" ingre_name="${nutrients.food}">
+							<a  href="javascript:;" ingre_num="${nutrients.nutrient_num}">
 								<em></em>								
 								<strong>${nutrients.food}</strong>
 							</a> 
@@ -309,7 +311,7 @@ if ($('#email') != null) {
 					<c:forEach var="nutrients" items="${nutrients}">						
 						<c:if test="${nutrients.foodgroup.equals('버섯류')}">
 							<li>
-							<a  href="javascript:;" ingre_name="${nutrients.food}">
+							<a  href="javascript:;" ingre_num="${nutrients.nutrient_num}">
 								<em></em>								
 								<strong>${nutrients.food}</strong>
 							</a> 
@@ -323,7 +325,7 @@ if ($('#email') != null) {
 					<c:forEach var="nutrients" items="${nutrients}">						
 						<c:if test="${nutrients.foodgroup.equals('과일류')}">
 							<li>
-							<a  href="javascript:;" ingre_name="${nutrients.food}">
+							<a  href="javascript:;" ingre_num="${nutrients.nutrient_num}">
 								<em></em>								
 								<strong>${nutrients.food}</strong>
 							</a> 
@@ -337,7 +339,7 @@ if ($('#email') != null) {
 					<c:forEach var="nutrients" items="${nutrients}">						
 						<c:if test="${nutrients.foodgroup.equals('육류')}">
 							<li>
-							<a  href="javascript:;" ingre_name="${nutrients.food}">
+							<a  href="javascript:;" ingre_num="${nutrients.nutrient_num}">
 								<em></em>								
 								<strong>${nutrients.food}</strong>
 							</a> 
@@ -351,7 +353,7 @@ if ($('#email') != null) {
 					<c:forEach var="nutrients" items="${nutrients}">						
 						<c:if test="${nutrients.foodgroup.equals('난류')}">
 							<li>
-							<a  href="javascript:;" ingre_name="${nutrients.food}">
+							<a  href="javascript:;" ingre_num="${nutrients.nutrient_num}">
 								<em></em>								
 								<strong>${nutrients.food}</strong>
 							</a> 
@@ -365,7 +367,7 @@ if ($('#email') != null) {
 					<c:forEach var="nutrients" items="${nutrients}">						
 						<c:if test="${nutrients.foodgroup.equals('어패류및기타수산물')}">
 							<li>
-							<a  href="javascript:;" ingre_name="${nutrients.food}">
+							<a  href="javascript:;" ingre_num="${nutrients.nutrient_num}">
 								<em></em>								
 								<strong>${nutrients.food}</strong>
 							</a> 
@@ -379,7 +381,7 @@ if ($('#email') != null) {
 					<c:forEach var="nutrients" items="${nutrients}">						
 						<c:if test="${nutrients.foodgroup.equals('해조류')}">
 							<li>
-							<a  href="javascript:;" ingre_name="${nutrients.food}">
+							<a  href="javascript:;" ingre_num="${nutrients.nutrient_num}">
 								<em></em>								
 								<strong>${nutrients.food}</strong>
 							</a> 
@@ -393,7 +395,7 @@ if ($('#email') != null) {
 					<c:forEach var="nutrients" items="${nutrients}">						
 						<c:if test="${nutrients.foodgroup.equals('우유및유제품류')}">
 							<li>
-							<a  href="javascript:;" ingre_name="${nutrients.food}">
+							<a  href="javascript:;" ingre_num="${nutrients.nutrient_num}">
 								<em></em>								
 								<strong>${nutrients.food}</strong>
 							</a> 

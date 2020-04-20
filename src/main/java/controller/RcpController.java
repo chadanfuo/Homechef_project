@@ -14,6 +14,7 @@ import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
@@ -230,8 +231,45 @@ public class RcpController {
 		
 	    dbPro.insertRcp(rcp);
 		
-	    return "redirect:/member/mypage?memNum="+memNum;
-	    /*return "redirect:/main";*/
+	    return "redirect:/member/mypage?memNum="+memNum;	   
+	}
+	
+	/*@RequestMapping(value = "recommend", method = RequestMethod.POST)
+	public String rcp_recommend(String[] foods, Model m) throws Exception {
+		if(foods==null){
+			foods[0]="";
+		}
+		List<Division> division=dbPro.getDivision();
+		List<Nutrient> recNutrients =dbPro.recNutrient(foods);
+		List<Rcp> recommendList=dbPro.recommend(foods);
+		int recommendCount = dbPro.recommendCount(foods);
+		
+		m.addAttribute("recommendList", recommendList);
+		m.addAttribute("recommendCount", recommendCount);
+		m.addAttribute("division", division);
+		m.addAttribute("recNutrients", recNutrients);
+		
+		return "rcp/recommendList";
+	}*/
+	
+	@SuppressWarnings("null")
+	@RequestMapping(value = "recommend", method = RequestMethod.POST)
+	public String rcp_recommend(String[] foods, Model m) throws Exception {		
+		if(foods==null){
+			foods=new String[]{""};
+		}
+		
+		List<Division> division=dbPro.getDivision();
+		List<Nutrient> recNutrients =dbPro.recNutrient(foods);
+		List<Rcp> recommendList=dbPro.recommend(foods);
+		int recommendCount = dbPro.recommendCount(foods);
+		
+		m.addAttribute("recommendList", recommendList);
+		m.addAttribute("recommendCount", recommendCount);
+		m.addAttribute("division", division);
+		m.addAttribute("recNutrients", recNutrients);
+		
+		return "rcp/recommendList";
 	}
 
 }

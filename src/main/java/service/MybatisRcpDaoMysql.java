@@ -462,4 +462,47 @@ public class MybatisRcpDaoMysql {
 		return rcpNutrient;
 	}
 	
+	public List<Rcp> recommend(String[] foods) {
+		SqlSession sqlSession = opendb.getSqlSessionFactory().openSession();
+		List<Rcp> recommendList = null;
+		String statement;
+
+		try {
+			statement = namespace + ".recommend";
+			recommendList = sqlSession.selectList(statement, foods);
+		} finally {
+			sqlSession.close();
+		}
+
+		return recommendList;
+	}
+	
+	public int recommendCount(String[] foods){
+		SqlSession sqlSession=opendb.getSqlSessionFactory().openSession();
+		int count;
+		
+		try{
+			String statement=namespace+".recommendCount"; 
+			count=sqlSession.selectOne(statement, foods);
+		}finally{
+			sqlSession.close();
+		}
+
+		return count;
+	}
+	
+	public List<Nutrient> recNutrient(String[] foods) {
+		SqlSession sqlSession = opendb.getSqlSessionFactory().openSession();
+		List<Nutrient> nutrient = null;
+
+		try {
+			String statement = namespace + ".recNutrient";
+			nutrient = sqlSession.selectList(statement, foods);
+		} finally {
+			sqlSession.close();
+		}
+
+		return nutrient;
+	}
+	
 }
