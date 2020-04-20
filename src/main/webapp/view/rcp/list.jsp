@@ -44,7 +44,7 @@
 }
 .lst_recipe li .author {
     text-align: center;
-    width: 0;
+    width: 60px;
     z-index: 5;
     display: block;
     margin-top: -40px;

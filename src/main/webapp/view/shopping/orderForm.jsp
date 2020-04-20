@@ -189,11 +189,14 @@ div.right {
 									${addr.recipient }<br> ${addr.zipcode }<br>
 									<c:set var="addre" value="${addr.address}" />
 									${addr.address}
-									<input type="hidden" name="recipient" value="${addr.recipient }"> 
-									<input type="hidden" name="zipcode" value="${addr.zipcode }"> 
-									<input type="hidden" name="address" value="${addr.address}">
+									
 								</div>
+								
 							</c:forEach>
+							<div class="form-group">
+									<input type="text" class="form-control" id="memo2" name="memo2"
+										placeholder="배송메모" >
+							</div>
 
 						</div>
 
@@ -235,7 +238,7 @@ div.right {
 								<div class="form-group">
 									<div class="col-md-12">
 										<div class="radio">
-											<label><input type="radio" name="howtopay" value="kakaopay" class="mr-2"> 페이결제</label>
+											<label><input type="radio" name="howtopay" value="kakaopay" class="mr-2"> 카카오페이</label>
 										</div>
 									</div>
 								</div>
@@ -246,13 +249,7 @@ div.right {
 										</div>
 									</div>
 								</div>
-								<div class="form-group">
-									<div class="col-md-12">
-										<div class="radio">
-											<label><input type="radio" name="howtopay" value="banktransfer" class="mr-2"> 실시간계좌이체</label>
-										</div>
-									</div>
-								</div>
+								
 								<div class="form-group">
 									<div class="col-md-12">
 										<div class="radio">
@@ -285,8 +282,6 @@ div.right {
 			</div>
 		</div>
 	</form>
-	<a herf="#"
-		onClick="window.open('${pageContext.request.contextPath}/shopping/pay?price=${totalpay }&email=wnfl7052@daum.net&name=${memName }&phone=01093529429&address=${addre}','결제창','width=800, height=700, toolbar=no, menubar=no, scrollbars=no, resizable=yes');return false;">결제?</a>
 	</section>
 	<!-- .section -->
 
@@ -327,6 +322,11 @@ div.right {
 					$("input[name=address]").eq(1).focus();
 					return false;
 				}
+				if(!($("input[name=memo]").val())){
+					alert("배송메모를 입력하세요.");
+					$("input[name=memo]").focus();
+					return false;
+				}
 				chk_count++;
 		    }else{
 		    	var chk_radio = document.getElementsByName('sel_address');
@@ -336,10 +336,16 @@ div.right {
 						sel_type++;
 					}
 				}
+				
 				if(sel_type<1){
 		            alert("주소를 선택해주세요"); 
 					return false;
 				}else{
+					if(!($("input[name=memo2]").val())){
+						alert("배송메모를 입력하세요.");
+						$("input[name=memo2]").focus();
+						return false;
+					}
 					chk_count++;
 				}
 		    }
@@ -364,39 +370,23 @@ div.right {
 	    }
  	}
 	
-	jQuery.fn.serializeObject = function() {
-	    var obj = null;
-	    try {
-	        if (this[0].tagName && this[0].tagName.toUpperCase() == "FORM") {
-	            var arr = this.serializeArray();
-	            if (arr) {
-	                obj = {};
-	                jQuery.each(arr, function() {
-	                    obj[this.name] = this.value;
-	                });
-	            }//if ( arr ) {
-	        }
-	    } catch (e) {
-	        alert(e.message);
-	    } finally {
-	    }
-	 
-	    return obj;
-	};
-
-
 
 	var success_pay = false;
     function paying(){
     	var IMP = window.IMP; // 생략가능
         IMP.init('imp89691835'); // 'iamport' 대신 부여받은 "가맹점 식별코드"를 사용
         var msg;
-        var select = $("input[name='select']:checked").val();
-       var data={ select : select }
-       var data2 = JSON.stringify(data);
-       console.log(data2);
+        var pay = $("input[name='howtopay']:checked").val();
+        var pgsa = '';
+        switch(pay){
+        case "kakaopay" : pgsa='kakaopay'; break;
+        case "card" : pgsa='html5_inicis'; break;
+        case "phonepay" : pgsa='danal'; break;
+        }
+      
+       console.log($("#orderform").serialize());
         IMP.request_pay({
-            pg : 'kakaopay',
+            pg : pgsa,
             pay_method : 'card',
             merchant_uid : 'merchant_' + new Date().getTime(),
             name : 'Home chef 주문 결제',
@@ -404,24 +394,29 @@ div.right {
             buyer_email : '${member.email}',
             buyer_name : '${member.name}',
             buyer_tel : '01093529429',
-            buyer_addr : '경기도 의정부시',
             //buyer_postcode : '123-456',
           	m_redirect_url : '${pageContext.request.contextPath}/shopping/complete2'
         },function(rsp) {
         	 if (rsp.success) { // 결제 성공 시: 결제 승인 또는 가상계좌 발급에 성공한 경우
         	      // jQuery로 HTTP 요청
-        	      jQuery.ajax({
+        	      $.ajax({
         	          url: "${pageContext.request.contextPath}/shopping/complete", // 가맹점 서버
         	          method: "POST",
-        	          headers: { "Content-Type": "application/json" },
-        	          data: data2
+        	          data: $("#orderform").serialize(),
+        	          contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+        	          dataType: 'html'
+        	           /* { 
+        	        	  "select" : select,
+        	        	  "sel_address" : $("input[name='sel_address']:checked").val(),
+        	        	  "addradd" : $("input[name='addradd']:checked").val()
+        	          } */
         	          
         	      }).done(function (data) {
         	        // 가맹점 서버 결제 API 성공시 로직
         	      })
-        	      console.log("s  "+data2);
         	    } else {
         	      alert("결제에 실패하였습니다. 에러 내용: " +  rsp.error_msg);
+        	      return false;
         	    }
         	 	location.href="${pageContext.request.contextPath}/shopping/complete2";
         	  });
