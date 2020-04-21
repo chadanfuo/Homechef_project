@@ -231,58 +231,6 @@ public class ShoppingController {
 		
 		return "shopping/orderForm";
 	}
- /*  
-   private String address_split(String value, int index){
-		String str = value;
-		String[] array = str.split(",");
-		return array[index];
-	}*/
-	
-	/*@RequestMapping(value = "complete_order", method=RequestMethod.POST) 
-	public String order(@RequestParam("select")int select, @RequestParam(value="sel_address", required=false, defaultValue="-1")int sel_address, @RequestParam(value="addradd", required=false, defaultValue="0")int addradd,
-			int[] nums, MemAddress memaddr, OrderInfo orderinfo, OrderProduct ordpro, Model m){
-		// TODO Auto-generated method stub
-		MemAddress getmemA = new MemAddress();
-		System.out.println("select : " + select);
-		System.out.println("address : " + sel_address);
-		System.out.println("address : " + memaddr.getAddress());
-		System.out.println("addr_add : "+addradd);
-		String addr = "";
-		if(select==0){
-			String[] array = memaddr.getAddress().split(",");
-			for(int i = 0; i < 2 ; i++){
-				addr+=array[i]+" ";
-			}
-			memaddr.setAddress(addr);
-			memaddr.setRecipient(address_split(memaddr.getRecipient(),select));
-			memaddr.setZipcode(address_split(memaddr.getZipcode(),select));
-			orderinfo.setAddress(addr);
-			orderinfo.setRecipient(address_split(memaddr.getRecipient(),select));
-			orderinfo.setZipcode(address_split(memaddr.getZipcode(),select));
-			
-			if(addradd==1){
-				service.insertMemAddr(memaddr);
-			}
-		}else{
-			// 기존 배송지 일경우, 주문완료된 카트들 삭제..
-			getmemA = service.getAddress1(sel_address);
-			orderinfo.setAddress(getmemA.getAddress());
-			orderinfo.setRecipient(getmemA.getRecipient());
-			orderinfo.setZipcode(getmemA.getZipcode());
-
-		}
-		System.out.println(addr);
-		
-		//service.insertOrderForm(orderinfo, ordpro, nums);
-		
-		
-		System.out.println(memaddr);
-		System.out.println(orderinfo);
-		System.out.println(ordpro);
-		
-		
-		return "shopping/orderSuccess";
-	}*/
 
 	@RequestMapping(value = "complete", method=RequestMethod.POST)
 	@ResponseBody
