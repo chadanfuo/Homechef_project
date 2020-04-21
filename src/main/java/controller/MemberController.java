@@ -43,17 +43,19 @@ public class MemberController {
 
 	@ModelAttribute
 	public void initProcess(Model m){
-		List<Rcp> foodnames =dbPro2.rcpAllList();
-		List<Ingredient> ingredients =dbPro2.getIngredient();
+		List<Rcp> rcpList =dbPro2.rcpAllList();
 		
 		HashSet<String> keywords = new HashSet<String>();
-		for(int i=0;i<foodnames.size();i++){
-			Rcp foodname=foodnames.get(i);
-			keywords.add(foodname.getFoodname());
-		}
-		for(int i=0;i<ingredients.size();i++){
-			Ingredient ingredient=ingredients.get(i);
-			keywords.add(ingredient.getIngredient());
+		
+		for(int i=0;i<rcpList.size();i++){			
+			Rcp rcp=rcpList.get(i);
+			keywords.add(rcp.getFoodname());
+			
+			String[] tags = null;			
+			tags = rcp.getHashtag().split("/");
+			for (int j = 1; j < tags.length; j++) {
+				keywords.add(tags[j]);
+			}
 		}
 		
 		m.addAttribute("keywords", keywords);

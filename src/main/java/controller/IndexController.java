@@ -63,17 +63,19 @@ public class IndexController {
 		session.setAttribute("cartcount", cartcount);
 		System.out.println("====================");
 		
-		List<Rcp> foodnames =dbPro.rcpAllList();
-		List<Ingredient> ingredients =dbPro.getIngredient();
+		List<Rcp> rcpList =dbPro.rcpAllList();
 		
 		HashSet<String> keywords = new HashSet<String>();
-		for(int i=0;i<foodnames.size();i++){
-			Rcp foodname=foodnames.get(i);
-			keywords.add(foodname.getFoodname());
-		}
-		for(int i=0;i<ingredients.size();i++){
-			Ingredient ingredient=ingredients.get(i);
-			keywords.add(ingredient.getIngredient());
+		
+		for(int i=0;i<rcpList.size();i++){			
+			Rcp rcp=rcpList.get(i);
+			keywords.add(rcp.getFoodname());
+			
+			String[] tags = null;			
+			tags = rcp.getHashtag().split("/");
+			for (int j = 1; j < tags.length; j++) {
+				keywords.add(tags[j]);
+			}
 		}
 		
 		model.addAttribute("keywords", keywords);

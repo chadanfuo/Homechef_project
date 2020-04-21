@@ -205,12 +205,6 @@ li.btn_add a {
 a{
 	text-decoration: none;
 }
-a:link{
-	color:black;
-}
-a:visited{
-	color:black;
-}
 </style>
 
 <body>

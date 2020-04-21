@@ -75,12 +75,6 @@
     white-space: nowrap;
     text-overflow: ellipsis;
 }
-a:link{
-	color:black;
-}
-a:visited{
-	color:black;
-}
 .search_cate {
     background: #fff;
     padding: 16px 25px 17px;

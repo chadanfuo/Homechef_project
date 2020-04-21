@@ -60,11 +60,6 @@
 		where division_num=#{cateNum}
 	</select>
 	
-	<select id="getIngredient" resultType="Ingredient">
-		select *
-		from ingredient
-	</select>
-	
 	<select id="rcpAllList" resultType="Rcp">
 		select *
 		from Rcp r, member m
@@ -159,21 +154,13 @@
 	<select id="searchCount" parameterType="String" resultType="int">
 		select count(*)
 		from Rcp r, member m
-		where r.memNum=m.memNum and 
-		      (foodname like '%'||#{keyword}||'%' or rcpnum in (
-													      select rcpnum 
-													      from ingredient 
-													      where ingredient like '%'||#{keyword}||'%'))
+		where r.memNum=m.memNum and (foodname like '%'||#{keyword}||'%' or hashtag like '%'||#{keyword}||'%')
 	</select>
 	
 	<select id="searchList"  parameterType="String" resultType="Rcp">
 		select *
 		from Rcp r, member m
-		where r.memNum=m.memNum and 
-		      (foodname like '%'||#{keyword}||'%' or rcpnum in (
-													      select rcpnum 
-													      from ingredient 
-													      where ingredient like '%'||#{keyword}||'%'))
+		where r.memNum=m.memNum and (foodname like '%'||#{keyword}||'%' or hashtag like '%'||#{keyword}||'%')
 	</select>
 	
 	<select id="readCountList" resultType="Rcp">

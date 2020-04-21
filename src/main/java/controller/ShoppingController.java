@@ -53,7 +53,8 @@ public class ShoppingController {
       System.out.println("memNum : "+session.getAttribute("memNum"));
       
 	  System.out.println("====================");
-      
+	  
+	  
    }
 
    @RequestMapping(value = "list") // 맨끝단의 url만 가지고 옴, get방식으로 한다.
