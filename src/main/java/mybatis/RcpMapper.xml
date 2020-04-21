@@ -225,4 +225,24 @@
 		where i.INGREDIENT=n.food and rcpnum=#{rcpnum}
 	</select>
 	
+	<insert id="addLike" parameterType="Likes">
+		insert into likes
+		values(#{memnum}, #{mypick})
+	</insert>
+
+	<!-- 전에 좋아요를 눌렀는 지 여부 확인 -->
+	<select id="checkLike" parameterType="hashmap" resultType="int">
+		select NVL(count(*),0) 
+		from Likes 
+		where memnum=#{memnum} and mypick=#{mypick}
+	</select>
+	
+	<delete id="cancelLike" parameterType="Likes">
+		delete from likes where memnum = #{memnum} and mypick=#{mypick}
+	</delete>
+	
+	<!-- 해당 게시글이 가지고 있는 좋아요의 전체 수  -->
+	<select id="likeCount" resultType="Likes">
+		select nvl(count(*), 0) from likes group by rcpnum
+	</select>
 </mapper>

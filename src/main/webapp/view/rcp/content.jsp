@@ -6,8 +6,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css">
 </head>
-
 <style>
 .box_write {
     background-color: #f7f7f7;
@@ -292,15 +292,45 @@ ol, ul {
                                                             	<c:if test="${checkScrap==0}">
                                                             	<form action="<%=request.getContextPath()%>/member/scrap" method="post">                                                                    
                                                                     <input type="hidden" name="scrapnum" value="${rcpContent.rcpnum}">
-                                                                    <button type="submit" class="btn_scrap">스크랩</button>
+                                                                    <button type="submit" class="btn_scrap"><i class="far fa-bookmark"></i> 스크랩</button>
                                                                 </form>
                                                             	</c:if>
                                                             	<c:if test="${checkScrap==1}">
                                                             	<form action="<%=request.getContextPath()%>/member/delScrap" method="post">                                                                    
                                                                     <input type="hidden" name="scrapnum" value="${rcpContent.rcpnum}">
-                                                                    <button type="submit" class="btn_scrap">스크랩취소</button>
+                                                                    <button type="submit" class="btn_scrap"><i class="fas fa-bookmark"></i>스크랩취소</button>
                                                                 </form>
                                                             	</c:if>
+                                                            	<!-- 좋아요 버튼 영역 추가 -->
+														<c:if test="${checkLike == 0}">
+														<div class="btn_area">
+															<form action="<%=request.getContextPath()%>/rcp/addLike"
+																method="POST">
+																<input type="hidden" name="rcpnum"
+																	value="${rcpContent.rcpnum}"><span
+																	style="font-size: 30px; color: red;">
+																	<button type="submit" class="btn_like">
+																		<i class="far fa-heart"></i>좋아요</button>
+																</span>
+															</form>
+														</div>
+														</c:if>
+														<c:if test="${checkLike == 1}">
+														<div class="btn_area">
+															<form action="<%=request.getContextPath()%>/rcp/cancelLike"
+																method="POST">
+																<input type="hidden" name="rcpnum"
+																	value="${rcpContent.rcpnum}"><span
+																	style="font-size: 30px;">
+																	<button type="submit" class="btn_like">
+																		<i class="fas fa-heart"></i>좋아요 취소</button>
+																</span>
+															</form>
+														</div>
+														</c:if>
+                                                            	
+                                                            	
+                                                            	
                                                             </c:if>                                                             
                                                             </div>
                                                             <!-- //버튼영역 추가 -->

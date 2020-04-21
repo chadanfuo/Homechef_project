@@ -43,6 +43,16 @@ division varchar2(40),
 cateName varchar2(40)
 );
 
+create table division(
+division_num number primary key,
+division_name varchar2(40)
+);
+
+CREATE TABLE likes(
+memnum int,
+mypick int
+);
+
 
 /* member */
 

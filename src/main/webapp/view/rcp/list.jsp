@@ -7,6 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <title>list</title>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css">
 </head>
 
 <style>
@@ -395,6 +396,12 @@ a {
 					<br><strong>${rcpAllList.title}</strong><p>${rcpAllList.foodname}</p>
 				</a>
 			</p>
+			<!-- 좋아요 버튼 -->
+			<div class="btn_area">
+				<span style="font-size:13px; color: red;">
+					<i class="fas fa-heart"></i></span>
+						<%-- <c:forEach var="likes" items="${likes.likecnt}"></c:forEach> --%>
+			</div>
 		</li>
 		</c:forEach>
 		</c:if>		

@@ -20,17 +20,18 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import model.Category;
 import model.Division;
 import model.Ingredient;
+import model.Likes;
 import model.Nutrient;
 import model.Rcp;
 import model.RcpContent;
-import service.MybatisRcpDaoMysql;
+import service.MybatisRcpDao;
 
 @Controller
 @RequestMapping("/rcp/")
 public class RcpController {
 	
 	@Autowired
-	MybatisRcpDaoMysql dbPro;
+	MybatisRcpDao dbPro;
 	
 	@ModelAttribute
 	public void initProcess(Model m){
@@ -138,6 +139,7 @@ public class RcpController {
 		
 		int checkScrap = dbPro.checkScrap(loginNum, rcpnum);
 		int scrapCount = dbPro.scrapCount(rcpnum);
+		int checkLike = dbPro.checkLike(loginNum, rcpnum);
 		
 		
 		m.addAttribute("rcpContent", rcpContent);
@@ -147,7 +149,9 @@ public class RcpController {
 		m.addAttribute("scrapCount", scrapCount);
 		m.addAttribute("loginNum", loginNum);
 		m.addAttribute("nutrient", nutrient);
+		m.addAttribute("checkLike", checkLike);
 		System.out.println(nutrient.toString());
+		
 		return "rcp/content";
 	}
 
@@ -234,4 +238,54 @@ public class RcpController {
 	    /*return "redirect:/main";*/
 	}
 
+	@RequestMapping(value = "addLike", method = RequestMethod.POST)
+	public String rcp_addLike(HttpServletRequest request, int rcpnum) throws Exception {
+		HttpSession session = request.getSession();
+
+		Likes likes = new Likes();
+		int loginNum = 0;
+
+		if (session.getAttribute("memNum") == null) {
+			session.setAttribute("memNum", 0);
+			loginNum = (int) session.getAttribute("memNum");
+		} else {
+			loginNum = (int) session.getAttribute("memNum");
+		}
+		
+		likes.setMemnum(loginNum); // 나
+		likes.setMypick(rcpnum); // 내가 고른 글
+
+		dbPro.addLike(likes);
+		System.out.println("좋아요를 눌렀습니다");
+
+		/*
+		 * if(리턴값이 0일 때) {
+		 * System.out.println("이 글에 아직 좋아요 안눌렀어, 그럼 바로 addLike(insert)"); } else
+		 * { (리턴값이 1일 때) System.out.println("내가 이 글에 좋아요 눌렀었어, delete"); }
+		 */
+		return "redirect:/rcp/content?rcpnum=" + rcpnum;
+	}
+
+	@RequestMapping(value = "cancelLike", method = RequestMethod.POST)
+	public String rcp_delLike(HttpServletRequest request, int rcpnum) throws Exception {
+		HttpSession session = request.getSession();
+
+		Likes likes = new Likes();
+		int loginNum = 0;
+
+		if (session.getAttribute("memNum") == null) {
+			session.setAttribute("memNum", 0);
+			loginNum = (int) session.getAttribute("memNum");
+		} else {
+			loginNum = (int) session.getAttribute("memNum");
+		}
+		
+		likes.setMemnum(loginNum); // 나
+		likes.setMypick(rcpnum); // 내가 고른 글
+
+		dbPro.cancelLike(likes);
+		System.out.println("좋아요 취소");
+
+		return "redirect:/rcp/content?rcpnum=" + rcpnum;
+	}
 }
