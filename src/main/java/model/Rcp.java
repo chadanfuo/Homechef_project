@@ -19,8 +19,16 @@ public class Rcp implements Serializable {
 	
 	private String ingredient;	
 	private int rcpcount;
+	private int scrapcount;	
 	
-	
+	public int getScrapcount() {
+		return scrapcount;
+	}
+
+	public void setScrapcount(int scrapcount) {
+		this.scrapcount = scrapcount;
+	}
+
 	public int getRcpcount() {
 		return rcpcount;
 	}

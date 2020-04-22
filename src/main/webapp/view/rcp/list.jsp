@@ -57,7 +57,8 @@
     border-radius: 50%;
     overflow: hidden;
     display: block;
-    margin: 0 auto 5px;
+    margin: 10px 0 -10px;
+    max-width: initial;
 }
 .lst_recipe li p {
     text-align: center;

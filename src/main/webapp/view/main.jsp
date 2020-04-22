@@ -464,41 +464,71 @@ if ($('#email') != null) {
     <section class="ftco-section ftco-category ftco-no-pt">
         <div class="container">
             <div class="row">
+            	<c:forEach var="top4" items="${top4}" varStatus="status">
+            		<c:if test="${status.index==0}">
+            			<c:set var="rcpnum1" value="${top4.rcpnum}" />
+            			<c:set var="foodname1" value="${top4.foodname}" />
+            			<c:set var="thumbnail1" value="${top4.thumbnail}" />
+            		</c:if>
+            		<c:if test="${status.index==1}">
+            			<c:set var="rcpnum2" value="${top4.rcpnum}" />
+            			<c:set var="foodname2" value="${top4.foodname}" />
+            			<c:set var="thumbnail2" value="${top4.thumbnail}" />
+            		</c:if>
+            		<c:if test="${status.index==2}">
+            			<c:set var="rcpnum3" value="${top4.rcpnum}" />
+            			<c:set var="foodname3" value="${top4.foodname}" />
+            			<c:set var="thumbnail3" value="${top4.thumbnail}" />
+            		</c:if>
+            		<c:if test="${status.index==3}">
+            			<c:set var="rcpnum4" value="${top4.rcpnum}" />
+            			<c:set var="foodname4" value="${top4.foodname}" />
+            			<c:set var="thumbnail4" value="${top4.thumbnail}" />
+            		</c:if>
+            	</c:forEach>
                 <div class="col-md-8">
                     <div class="row">
                         <div class="col-md-6 order-md-last align-items-stretch d-flex">
                             <div class="category-wrap-2 ftco-animate img align-self-stretch d-flex" style="background-image: url(images/category.jpg);">
                                 <div class="text text-center">
-                                    <h2>한 그릇의 품격</h2>                                 
-                                </div>
+                                    <h2>레시피 TOP4</h2>                                 
+                                </div>                   
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="category-wrap ftco-animate img mb-4 d-flex align-items-end" style="background-image: url(images/category-1.jpg);">
+                        	<a href="<%=request.getContextPath()%>/rcp/content?rcpnum=${rcpnum1}">
+                            <div class="category-wrap ftco-animate img mb-4 d-flex align-items-end" style="background-image: url(<%=request.getContextPath()%>/uploadRcpFile/${thumbnail1});">
+                            	<div class="text px-3 py-1">
+                                    <h2 class="mb-0" style="color:white">${foodname1}</h2>
+                                </div> 
+                            </div>
+                            </a>
+                            <a href="<%=request.getContextPath()%>/rcp/content?rcpnum=${rcpnum2}">
+                            <div class="category-wrap ftco-animate img d-flex align-items-end" style="background-image: url(<%=request.getContextPath()%>/uploadRcpFile/${thumbnail2});">
                                 <div class="text px-3 py-1">
-                                    <h2 class="mb-0"><a href="#">Fruits</a></h2>
+                                    <h2 class="mb-0" style="color:white">${foodname2}</h2>
                                 </div>
                             </div>
-                            <div class="category-wrap ftco-animate img d-flex align-items-end" style="background-image: url(images/category-2.jpg);">
-                                <div class="text px-3 py-1">
-                                    <h2 class="mb-0"><a href="#">Vegetables</a></h2>
-                                </div>
-                            </div>
+                            </a>
                         </div>
                     </div>
                 </div>
 
                 <div class="col-md-4">
-                    <div class="category-wrap ftco-animate img mb-4 d-flex align-items-end" style="background-image: url(images/category-3.jpg);">
+                	<a href="<%=request.getContextPath()%>/rcp/content?rcpnum=${rcpnum3}">
+                    <div class="category-wrap ftco-animate img mb-4 d-flex align-items-end" style="background-image: url(<%=request.getContextPath()%>/uploadRcpFile/${thumbnail3});">
                         <div class="text px-3 py-1">
-                            <h2 class="mb-0"><a href="#">Juices</a></h2>
+                            <h2 class="mb-0" style="color:white">${foodname3}</h2>
                         </div>
                     </div>
-                    <div class="category-wrap ftco-animate img d-flex align-items-end" style="background-image: url(images/category-4.jpg);">
+                    </a>
+                    <a href="<%=request.getContextPath()%>/rcp/content?rcpnum=${rcpnum4}">
+                    <div class="category-wrap ftco-animate img d-flex align-items-end" style="background-image: url(<%=request.getContextPath()%>/uploadRcpFile/${thumbnail4});">
                         <div class="text px-3 py-1">
-                            <h2 class="mb-0"><a href="#">Dried</a></h2>
+                            <h2 class="mb-0" style="color:white">${foodname4}</h2>
                         </div>
                     </div>
+                    </a>
                 </div>
             </div>
         </div>

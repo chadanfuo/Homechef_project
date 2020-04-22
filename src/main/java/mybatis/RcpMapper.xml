@@ -268,4 +268,17 @@
 		from rcp
 	</select>
 	
+	<select id="top4" resultType="Rcp">
+		<![CDATA[
+		select *
+		from (select ROW_NUMBER() OVER (ORDER BY scrapcount DESC) AS rank, r.*, s.*
+		      from rcp r, 
+		          (select scrapnum, count(*) as scrapcount
+		           from scrap
+		           group by scrapnum) s
+		      where r.rcpnum=s.scrapnum)
+		where rank<5
+		]]>
+	</select>
+	
 </mapper>

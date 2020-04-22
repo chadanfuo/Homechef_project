@@ -95,34 +95,6 @@ ol, ul {
 	color: #3b3b3b; 
 	border-bottom: 3px solid #ff6d00;
 }
-/* .itemcard-list {
-	display: table;
-	width: auto;
-	min-width: 100%;
-	margin-left: -26px;
-	overflow: auto;
-	margin-bottom: -85px;
-}
-
-.itemcard-list-item {
-	position: relative;
-	width: 80px;
-	padding-right: 26px;
-	box-sizing: border-box;
-	margin-bottom: 30px;
-	float: none;
-	vertical-align: top;
-	display: inline-block;
-	word-break: break-all;
-}
-.item img {
-    display: block;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    top: 30px;
-    left: 30px;
-} */
 .lst_recipe {
     width: 1500px;
     position: relative;
@@ -166,7 +138,8 @@ ol, ul {
     border-radius: 50%;
     overflow: hidden;
     display: block;
-    margin: 0 auto 5px;
+    margin: 10px 0 -10px;
+    max-width: initial;
 }
 .lst_recipe li p {
     text-align: center;

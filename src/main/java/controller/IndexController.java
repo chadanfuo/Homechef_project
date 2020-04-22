@@ -88,11 +88,13 @@ public class IndexController {
 		int memberCnt=dbPro.memberCnt();
 		int rcpCnt=dbPro.rcpAllCount();
 		int rcpReadCnt=dbPro.rcpReadCnt();
+		List<Rcp> top4=dbPro.top4();
 
 		m.addAttribute("nutrients", nutrients);	
 		m.addAttribute("memberCnt", memberCnt);	
 		m.addAttribute("rcpCnt", rcpCnt);	
-		m.addAttribute("rcpReadCnt", rcpReadCnt);	
+		m.addAttribute("rcpReadCnt", rcpReadCnt);
+		m.addAttribute("top4", top4);
 		
 		return "main";
 	}

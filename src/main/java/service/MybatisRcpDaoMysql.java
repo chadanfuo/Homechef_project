@@ -518,4 +518,18 @@ public class MybatisRcpDaoMysql {
 		return count;
 	}
 	
+	public List<Rcp> top4() {
+		SqlSession sqlSession = opendb.getSqlSessionFactory().openSession();
+		List<Rcp> top5 = null;
+
+		try {
+			String statement = namespace + ".top4";
+			top5 = sqlSession.selectList(statement);
+		} finally {
+			sqlSession.close();
+		}
+
+		return top5;
+	}
+	
 }
