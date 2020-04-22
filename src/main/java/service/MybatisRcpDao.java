@@ -17,7 +17,7 @@ import model.RcpContent;
 import mybatis.AbstractRepository;
 
 @Component
-public class MybatisRcpDaoMysql {
+public class MybatisRcpDao {
 	private final String namespace = "mybatis.RcpMapper";
 
 	@Autowired

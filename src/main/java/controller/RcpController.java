@@ -24,14 +24,14 @@ import model.Ingredient;
 import model.Nutrient;
 import model.Rcp;
 import model.RcpContent;
-import service.MybatisRcpDaoMysql;
+import service.MybatisRcpDao;
 
 @Controller
 @RequestMapping("/rcp/")
 public class RcpController {
 	
 	@Autowired
-	MybatisRcpDaoMysql dbPro;
+	MybatisRcpDao dbPro;
 	
 	@ModelAttribute
 	public void initProcess(Model m){
