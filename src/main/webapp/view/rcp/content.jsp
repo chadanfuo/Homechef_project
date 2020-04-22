@@ -142,8 +142,7 @@ ol, ul {
             <!-- Boxes de Acoes -->
             <div class="col-xs-12 col-sm-6 col-lg-8">
                 <div class="box" style="width: 1000px">
-                    <div class="icon">
-                        <div class="image"><i class="fa fa-soundcloud"></i></div>
+                    <div class="icon">                        
                         <div class="info">
 
                             <!-- Modal -->

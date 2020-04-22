@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -38,8 +39,7 @@
 		<div class="row">
 			<div class="col-lg-8 ftco-animate">
 				<div class="sidebar-box">
-					<form action="${pageContext.request.contextPath}/chef/cheflist"
-						method="post" class="search-form">
+					<form action="${pageContext.request.contextPath}/chef" method="post" class="search-form">
 						<div class="form-group">
 							<span class="icon ion-ios-search"></span> <input type="text"
 								id="keyword" name="keyword" class="form-control"
@@ -47,85 +47,82 @@
 						</div>
 					</form>
 				</div>
-				<h4 class="mb-2">주간 인기 쉐프</h4>
-				${keyword}
+
 				<c:if test="${keyword!=null}">
-					<b style="color: black">'${keyword}'</b> 검색결과  <b>${memAllList}</b>개의 쉐프가 검색되었습니다.
-		</c:if>
-
-				<div class="about-author d-flex p-4 bg-light">
-					<div class="bio align-self-md-center mr-4">
-						<img src="images/person_1.jpg" alt="Image placeholder"
-							class="img-fluid mb-4">
+					<div style="margin-bottom: 20px">					
+					<b style="color: black">'${keyword}'</b> 쉐프가 검색되었습니다.
 					</div>
-					<div class="desc align-self-md-center">
-						<h3>Lance Smith</h3>
-						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-							Ducimus itaque, autem necessitatibus voluptate quod mollitia
-							delectus aut, sunt placeat nam vero culpa sapiente consectetur
-							similique, inventore eos fugit cupiditate numquam!</p>
-					</div>
-				</div>
-
-
-				<div class="pt-5 mt-5">
-					<h4 class="mb-5">인기 쉐프 순위</h4>
 					<ul class="comment-list">
-						<c:forEach var="memAllList" items="${memAllList}"
-							varStatus="status">
+						<c:forEach var="memSearch" items="${memSearch}">
 							<li class="comment">
 								<div class="list_ranking">
-									<p>${status.count}</p>
+									<p>${memSearch.rank}</p>
 								</div>
 
-								<div class="vcard bio">
-									<img
-										src="<%=request.getContextPath()%>/uploadFile/${memAllList.profile}">
+								<div class="vcard bio">									
+									<img src="<%=request.getContextPath()%>/uploadFile/${memSearch.profile}">								
 								</div>
 								<div class="comment-body">
-									<h3>${memAllList.name}</h3>
+									<h3>${memSearch.name}</h3>
 									<span> <a href="#" class="reply">팔로우하기</a>
 									</span>
 
 									<div class="meta">
 										<div>
-											<a href="#"><span class="icon-eye"></span> 52,454</a>
+											<a><span class="icon-eye"></span> ${memSearch.readcnt}</a>
 										</div>
 										<div>
-											<a href="#"><span class="icon-person"></span> 2,123</a>
+											<a><span class="icon-person"></span> ${memSearch.followcnt}</a>
 										</div>
 										<div>
-											<a href="#"><span class="icon-chat"></span> 19</a>
+											<a><span class="icon-chat"></span> ${memSearch.rcpcnt}</a>
 										</div>
 										<div>
-											<a href="#"><span class="icon-heartbeat"></span> 19</a>
+											<a><span class="icon-heartbeat"></span> ${memSearch.readcnt}</a>
 										</div>
 									</div>
 								</div>
 							</li>
+						</c:forEach>
+					</ul>
+				</c:if>
 
+				<div class="pt-5 mt-5">
+					<h4 class="mb-5">인기 쉐프 순위</h4>
+					<ul class="comment-list">
+						<c:forEach var="memList" items="${memList}">
+							<li class="comment">
+								<div class="list_ranking">
+									<p>${memList.rank}</p>
+								</div>
 
+								<div class="vcard bio">									
+									<img src="<%=request.getContextPath()%>/uploadFile/${memList.profile}">								
+								</div>
+								<div class="comment-body">
+									<h3>${memList.name}</h3>
+									<span> <a href="#" class="reply">팔로우하기</a>
+									</span>
+
+									<div class="meta">
+										<div>
+											<a><span class="icon-eye"></span> ${memList.readcnt}</a>
+										</div>
+										<div>
+											<a><span class="icon-person"></span> ${memList.followcnt}</a>
+										</div>
+										<div>
+											<a><span class="icon-chat"></span> ${memList.rcpcnt}</a>
+										</div>
+										<div>
+											<a><span class="icon-heartbeat"></span> ${memList.readcnt}</a>
+										</div>
+									</div>
+								</div>
+							</li>
 						</c:forEach>
 					</ul>
 					<!-- END comment-list -->
-
-
-				</div>
-
-				<div class="row mt-5">
-					<div class="col text-center">
-						<div class="block-27">
-							<ul>
-								<li><a href="#">&lt;</a></li>
-								<li class="active"><span>1</span></li>
-								<li><a href="#">2</a></li>
-								<li><a href="#">3</a></li>
-								<li><a href="#">4</a></li>
-								<li><a href="#">5</a></li>
-								<li><a href="#">&gt;</a></li>
-							</ul>
-						</div>
-					</div>
 				</div>
 			</div>
 			<!-- .col-md-8 -->

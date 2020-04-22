@@ -162,13 +162,13 @@ public class BrandRepository{
 			sqlSession.close();
 		}
 	}
-	public List<Member> searchList() {
+	public List<Member> memList() {
 
 		SqlSession sqlSession = opendb.getSqlSessionFactory().openSession();
 		List<Member> searchList=null;
 		
 		try{
-			String statement = namespace + ".findMember";
+			String statement = namespace + ".memList";
 			searchList=sqlSession.selectList(statement);
 			
 			
@@ -179,21 +179,18 @@ public class BrandRepository{
 		return   searchList;
 	}
 
-	public List<Member> searchList(String keyword) {
-
+	public List<Member> memSearch(String keyword) {
 		SqlSession sqlSession = opendb.getSqlSessionFactory().openSession();
-		List<Member> searchList=null;
+		List<Member> memSearch=null;
 		
 		try{
-			String statement = namespace + ".findMember";
-			searchList=sqlSession.selectList(statement, keyword);
-			
-			
+			String statement = namespace + ".memSearch";
+			memSearch=sqlSession.selectList(statement, keyword);			
 		
 		}finally{
 			sqlSession.close();
 		}
-		return   searchList;
+		return   memSearch;
 	}
 	 public List<Member> selectName(String name) {
 		 

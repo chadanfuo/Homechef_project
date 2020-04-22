@@ -19,13 +19,43 @@
 		from brand
 	</select>
 	
+	<select id="memList" resultType="Member">
+		select rank, name,profile,readcnt,rcpcnt,followcnt
+		from (select ROW_NUMBER() OVER (ORDER BY readcnt DESC) AS rank, m.*,r1.*,r2.*,f.*
+		      from member m,
+		          (select memnum, sum(readcount) as readcnt
+		           from rcp
+		           group by memnum) r1,
+		          (select memnum, count(*) as rcpcnt
+		           from rcp
+		           group by memnum)r2,
+		          (select follownum, count(*) as followcnt
+		           from follow
+		           group by follownum) f
+		      where m.memnum=r1.memnum and m.memnum=r2.memnum and m.memnum=f.follownum 
+		      order by readcnt desc)
+	</select>
 	     
-<select id="findMember" parameterType="String" resultType="Member">
-       select *from member where name like '%'||#{keyword}||'%' 
-		
-</select>
-<select id="selectName" parameterType="String" resultType="Member">
-       select *from member where name = #{name}
-		
-</select>
+	<select id="memSearch" parameterType="String" resultType="Member">
+		select rank, name,profile,readcnt,rcpcnt,followcnt
+		from (select ROW_NUMBER() OVER (ORDER BY readcnt DESC) AS rank, m.*,r1.*,r2.*,f.*
+		      from member m,
+		          (select memnum, sum(readcount) as readcnt
+		           from rcp
+		           group by memnum) r1,
+		          (select memnum, count(*) as rcpcnt
+		           from rcp
+		           group by memnum)r2,
+		          (select follownum, count(*) as followcnt
+		           from follow
+		           group by follownum) f
+		      where m.memnum=r1.memnum and m.memnum=r2.memnum and m.memnum=f.follownum
+		      order by readcnt desc)
+		where upper(name) like '%'||upper(#{keyword})||'%'	
+	</select>
+	
+	<select id="selectName" parameterType="String" resultType="Member">
+	       select *from member where name = #{name}			
+	</select>
+	
 </mapper>	

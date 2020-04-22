@@ -264,7 +264,7 @@
 	</select>
 	
 	<select id="rcpReadCnt"  resultType="int">
-		select sum(readcount)
+		select nvl(sum(readcount),0)
 		from rcp
 	</select>
 	

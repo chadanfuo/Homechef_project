@@ -275,26 +275,24 @@ public class IndexController {
 		
 	}
 	@RequestMapping(value = "/chef")
-	public String cheflist( Model model) {
-		List<Member> memAllList;
-		  memAllList=service.searchList();
-		  model.addAttribute("memAllList", memAllList);
+	public String cheflist(String keyword, Model model) {
+		List<Member> memList=service.memList();
+		List<Member> memSearch = service.memSearch(keyword);
+		  		
+		model.addAttribute("memList", memList);
+		model.addAttribute("memSearch", memSearch);
+		model.addAttribute("keyword", keyword);
+		
 		return "/chef/cheflist";
 	}
 
-	@RequestMapping(value = "/chef/cheflist")
-	public String memSearch(String keyword,String name,  Model model) {
-		 List<Member> memAllList;
-		 
+	@RequestMapping(value = "/searchChef", method = RequestMethod.POST)
+	public String memSearch(String keyword, Model model) {		
+		List<Member> memSearch = service.memSearch(keyword);
+		  
+		model.addAttribute("memSearch", memSearch);
+		model.addAttribute("keyword", keyword);
 		
-		List<Member> member = service.selectName(name);
-
-		  memAllList=service.searchList(keyword);
-	
-		 // model.addAttribute("boardList",boardList);
-		  model.addAttribute("member", member);
-		  model.addAttribute("keyword", keyword);
-		  model.addAttribute("memAllList", memAllList);
 		return "/chef/cheflist";
 	}
 
