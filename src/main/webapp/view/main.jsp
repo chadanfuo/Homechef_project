@@ -170,7 +170,7 @@ if ($('#email') != null) {
                         <div class="col-md-12 ftco-animate text-center">
                             <h1 class="mb-2"><spring:message code="mainslidetitle" />  </h1>
                             <h2 class="subheading mb-4">We deliver organic vegetables &amp; fruits</h2>
-                            <p><a href="#" class="btn btn-primary"><spring:message code="viewdetail" /></a></p>
+                            <p><a href="<%=request.getContextPath()%>/rcp/list?sorting=latest&cateNum=0" class="btn btn-primary"><spring:message code="viewdetail" /></a></p>
                         </div>
 
                     </div>
@@ -185,7 +185,7 @@ if ($('#email') != null) {
                         <div class="col-sm-12 ftco-animate text-center">
                             <h1 class="mb-2">100% Fresh &amp; Organic Foods</h1>
                             <h2 class="subheading mb-4">We deliver organic vegetables &amp; fruits</h2>
-                            <p><a href="#" class="btn btn-primary"><spring:message code="viewdetail" /></a></p>
+                            <p><a href="<%=request.getContextPath()%>/shop" class="btn btn-primary"><spring:message code="viewdetail" /></a></p>
                         </div>
 
                     </div>
@@ -197,8 +197,6 @@ if ($('#email') != null) {
     <section class="sec_recommend">
 		<div class="container">
 			<h2>내가 가진 재료로 레시피 추천받기</h2>
-
-			<p>냉장고를 부탁해! 냉장고에 숨어 있는 재료로 맛있는 요리를 만들어보세요.</p>
 			<form action="<%=request.getContextPath()%>/rcp/recommend"  id="tabs" accept-charset="UTF-8" method="POST">
 				<fieldset class="field1">
 					<input type="text" class="search-ingre" placeholder="재료명으로 검색해보세요." autocomplete="off">
@@ -459,38 +457,10 @@ if ($('#email') != null) {
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3 text-center d-flex align-self-stretch ftco-animate">
-                    <div class="media block-6 services mb-md-0 mb-4">
-                        <div class="icon bg-color-4 d-flex justify-content-center align-items-center mb-2">
-                            <span class="flaticon-customer-service"></span>
-                        </div>
-                        <div class="media-body">
-                            <h3 class="heading"><spring:message code="chef_cir4" /></h3>
-                            <span><spring:message code="chef_cir4_stxt" /></span>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </section>
-<!-- <section class="ftco-section ftco-category ftco-no-pt">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-3">
-                
-                </div>
-                 <div class="col-md-3">
-                
-                </div>
-                 <div class="col-md-3">
-                
-                </div>
-                 <div class="col-md-3">
-                
-                </div>
-                </div>
-                </div>
-                </section> -->
+
     <section class="ftco-section ftco-category ftco-no-pt">
         <div class="container">
             <div class="row">
@@ -499,9 +469,7 @@ if ($('#email') != null) {
                         <div class="col-md-6 order-md-last align-items-stretch d-flex">
                             <div class="category-wrap-2 ftco-animate img align-self-stretch d-flex" style="background-image: url(images/category.jpg);">
                                 <div class="text text-center">
-                                    <h2>한 그릇의 품격</h2>
-                                    <p>먹어는 봤나~</p>
-                                    <p><a href="#" class="btn btn-primary">view +</a></p>
+                                    <h2>한 그릇의 품격</h2>                                 
                                 </div>
                             </div>
                         </div>
@@ -972,7 +940,7 @@ if ($('#email') != null) {
                             <div class="col-md-3 d-flex justify-content-center counter-wrap ftco-animate">
                                 <div class="block-18 text-center">
                                     <div class="text">
-                                        <strong class="number" data-number="25486">0</strong>
+                                        <strong class="number" data-number="${memberCnt}">0</strong>
                                         <span>총 쉐프수</span>
                                     </div>
                                 </div>
@@ -980,7 +948,7 @@ if ($('#email') != null) {
                             <div class="col-md-3 d-flex justify-content-center counter-wrap ftco-animate">
                                 <div class="block-18 text-center">
                                     <div class="text">
-                                        <strong class="number" data-number="124086">0</strong>
+                                        <strong class="number" data-number="${rcpCnt}">0</strong>
                                         <span>총 레시피수</span>
                                     </div>
                                 </div>
@@ -988,15 +956,7 @@ if ($('#email') != null) {
                             <div class="col-md-3 d-flex justify-content-center counter-wrap ftco-animate">
                                 <div class="block-18 text-center">
                                     <div class="text">
-                                        <strong class="number" data-number="54291">0</strong>
-                                        <span>월 방문자수</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-3 d-flex justify-content-center counter-wrap ftco-animate">
-                                <div class="block-18 text-center">
-                                    <div class="text">
-                                        <strong class="number" data-number="486408">0</strong>
+                                        <strong class="number" data-number="${rcpReadCnt}">0</strong>
                                         <span>총 레시피 조회수</span>
                                     </div>
                                 </div>

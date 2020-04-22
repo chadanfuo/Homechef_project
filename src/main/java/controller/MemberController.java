@@ -179,11 +179,14 @@ public class MemberController {
 		int checkFollow = dbPro.checkFollow(loginNum, memNum);
 		int followCount = dbPro.followCount(memNum);
 		int followerCount = dbPro.followerCount(memNum);
+		List<Follow> followerCount2 = dbPro.followerCount2(memNum);
 		List<Member> followList = dbPro.followList(memNum);		
 		int rcpCount = dbPro.rcpCount(memNum);
 		List<Rcp> rcpList=dbPro.rcpList(memNum);
 		int scrapCount=dbPro.scrapCount(memNum);
 		List<Rcp> scarpList=dbPro.scarpList(memNum);
+		List<Rcp> followRcpCount=dbPro.followRcpCount(memNum);
+		List<Rcp> followRcp=dbPro.followRcp(memNum);
 
 		m.addAttribute("loginNum", loginNum);
 
@@ -196,7 +199,10 @@ public class MemberController {
 		m.addAttribute("rcpList", rcpList);
 		m.addAttribute("scrapCount", scrapCount);
 		m.addAttribute("scarpList", scarpList);
-
+		m.addAttribute("followerCount2", followerCount2);
+		m.addAttribute("followRcpCount", followRcpCount);
+		m.addAttribute("followRcp", followRcp);
+		
 		return "mypage/mypage";
 	}
 

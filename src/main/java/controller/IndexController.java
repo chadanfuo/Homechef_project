@@ -85,8 +85,14 @@ public class IndexController {
 	@RequestMapping(value="/main")
 	public String index(Model m){
 		List<Nutrient> nutrients =dbPro.getNutrient();
+		int memberCnt=dbPro.memberCnt();
+		int rcpCnt=dbPro.rcpAllCount();
+		int rcpReadCnt=dbPro.rcpReadCnt();
 
 		m.addAttribute("nutrients", nutrients);	
+		m.addAttribute("memberCnt", memberCnt);	
+		m.addAttribute("rcpCnt", rcpCnt);	
+		m.addAttribute("rcpReadCnt", rcpReadCnt);	
 		
 		return "main";
 	}

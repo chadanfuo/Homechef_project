@@ -6,9 +6,22 @@ public class Follow implements Serializable {
 	private int memNum;
 	private int followNum;
 	
+	private int count;
+	
 	public Follow() {
 		
 	}
+
+	
+	public int getCount() {
+		return count;
+	}
+
+
+	public void setCount(int count) {
+		this.count = count;
+	}
+
 
 	public int getMemNum() {
 		return memNum;
@@ -25,5 +38,13 @@ public class Follow implements Serializable {
 	public void setFollowNum(int followNum) {
 		this.followNum = followNum;
 	}
+
+
+	@Override
+	public String toString() {
+		return "Follow [memNum=" + memNum + ", followNum=" + followNum + ", count=" + count + "]";
+	}
+	
+	
 	
 }

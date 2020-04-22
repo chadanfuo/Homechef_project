@@ -18,7 +18,17 @@ public class Rcp implements Serializable {
 	private String readcount;
 	
 	private String ingredient;	
+	private int rcpcount;
 	
+	
+	public int getRcpcount() {
+		return rcpcount;
+	}
+
+	public void setRcpcount(int rcpcount) {
+		this.rcpcount = rcpcount;
+	}
+
 	public String getIngredient() {
 		return ingredient;
 	}

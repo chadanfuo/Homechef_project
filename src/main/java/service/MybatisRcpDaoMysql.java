@@ -490,4 +490,32 @@ public class MybatisRcpDaoMysql {
 		return nutrient;
 	}
 	
+	public int memberCnt() {
+		SqlSession sqlSession = opendb.getSqlSessionFactory().openSession();
+		int count;
+
+		try {
+			String statement = namespace + ".memberCnt";
+			count = sqlSession.selectOne(statement);
+		} finally {
+			sqlSession.close();
+		}
+
+		return count;
+	}
+	
+	public int rcpReadCnt() {
+		SqlSession sqlSession = opendb.getSqlSessionFactory().openSession();
+		int count;
+
+		try {
+			String statement = namespace + ".rcpReadCnt";
+			count = sqlSession.selectOne(statement);
+		} finally {
+			sqlSession.close();
+		}
+
+		return count;
+	}
+	
 }

@@ -96,25 +96,31 @@
 	
 	<select id="rcpAllList3" parameterType="int" resultType="Rcp">
 		select *
-		from(
-		      Select rcpnum,thumbnail,r.memnum,profile,foodname,title,reg_date, Regexp_Substr(category,'[^/]+', 1, Level) as catenum, level as lv, lag(level,1,0) over(partition by rcpnum order by level) as lg
-		      From rcp r, member m
-		      where r.memNum=m.memNum
-		      Connect By Regexp_Substr(category, '[^/]+', 1, Level) Is Not Null
-		    )r, category c
-		where r.catenum=c.catenum and lv!=lg and division_num=#{cateNum}
+		From rcp r, member m
+		where r.memNum=m.memNum and
+		      rcpnum in (select rcpnum
+		                 from(Select rcpnum,thumbnail,r.memnum,profile,foodname,title,reg_date, Regexp_Substr(category,'[^/]+', 1, Level) as catenum, level as lv, lag(level,1,0) over(partition by rcpnum order by level) as lg
+		                      From rcp r, member m
+		                      where r.memNum=m.memNum
+		                      Connect By Regexp_Substr(category, '[^/]+', 1, Level) Is Not Null
+		                      )r, category c
+		                 where r.catenum=c.catenum and lv!=lg and division_num=#{cateNum}
+		                 group by rcpnum)
 		order by reg_date desc
 	</select>
 	
 	<select id="rcpAllCount3"  parameterType="int" resultType="int">
 		select count(*)
-		from(
-		      Select rcpnum,thumbnail,r.memnum,profile,foodname,title, Regexp_Substr(category,'[^/]+', 1, Level) as catenum, level as lv, lag(level,1,0) over(partition by rcpnum order by level) as lg
-		      From rcp r, member m
-		      where r.memNum=m.memNum
-		      Connect By Regexp_Substr(category, '[^/]+', 1, Level) Is Not Null
-		    )r, category c
-		where r.catenum=c.catenum and lv!=lg and division_num=#{cateNum}
+		From rcp r, member m
+		where r.memNum=m.memNum and
+		      rcpnum in (select rcpnum
+		                 from(Select rcpnum,thumbnail,r.memnum,profile,foodname,title,reg_date, Regexp_Substr(category,'[^/]+', 1, Level) as catenum, level as lv, lag(level,1,0) over(partition by rcpnum order by level) as lg
+		                      From rcp r, member m
+		                      where r.memNum=m.memNum
+		                      Connect By Regexp_Substr(category, '[^/]+', 1, Level) Is Not Null
+		                      )r, category c
+		                 where r.catenum=c.catenum and lv!=lg and division_num=#{cateNum}
+		                 group by rcpnum)
 	</select>
 	
 	<select id="rcpContent" parameterType="int" resultType="Rcp">
@@ -184,13 +190,16 @@
 	
 	<select id="readCountList3" parameterType="int" resultType="Rcp">
 		select *
-		from(
-		      Select rcpnum,thumbnail,r.memnum,profile,foodname,title,reg_date,readcount, Regexp_Substr(category,'[^/]+', 1, Level) as catenum, level as lv, lag(level,1,0) over(partition by rcpnum order by level) as lg
-		      From rcp r, member m
-		      where r.memNum=m.memNum
-		      Connect By Regexp_Substr(category, '[^/]+', 1, Level) Is Not Null
-		    )r, category c
-		where r.catenum=c.catenum and lv!=lg and division_num=#{cateNum}
+		From rcp r, member m
+		where r.memNum=m.memNum and
+		      rcpnum in (select rcpnum
+		                 from(Select rcpnum,thumbnail,r.memnum,profile,foodname,title,reg_date, Regexp_Substr(category,'[^/]+', 1, Level) as catenum, level as lv, lag(level,1,0) over(partition by rcpnum order by level) as lg
+		                      From rcp r, member m
+		                      where r.memNum=m.memNum
+		                      Connect By Regexp_Substr(category, '[^/]+', 1, Level) Is Not Null
+		                      )r, category c
+		                 where r.catenum=c.catenum and lv!=lg and division_num=#{cateNum}
+		                 group by rcpnum)
 		order by readcount desc
 	</select>
 	
@@ -247,6 +256,16 @@
 			  <foreach collection="array" item="item"  open="(" close=")" separator=",">
 				 #{item}
 			  </foreach>
+	</select>
+	
+	<select id="memberCnt"  resultType="int">
+		select count(*) 
+		from member
+	</select>
+	
+	<select id="rcpReadCnt"  resultType="int">
+		select sum(readcount)
+		from rcp
 	</select>
 	
 </mapper>

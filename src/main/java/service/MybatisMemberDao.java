@@ -203,13 +203,28 @@ public class MybatisMemberDao
 		return count;
 	}
 	
+	public List<Follow> followerCount2(int memNum){
+		SqlSession sqlSession=opendb.getSqlSessionFactory().openSession();
+		List<Follow> followerCount2=null;
+		String statement;
+		
+		try{
+			statement=namespace+".followerCount2";         
+			followerCount2=sqlSession.selectList(statement, memNum);
+		}finally{
+			sqlSession.close();
+		}
+		
+		return followerCount2;
+	}
+	
 	public List<Member> followList(int memNum){
 		SqlSession sqlSession=opendb.getSqlSessionFactory().openSession();
 		List<Member> followList=null;
 		String statement;
 		
 		try{
-			statement=namespace+".getFollow";         
+			statement=namespace+".followList";         
 			followList=sqlSession.selectList(statement, memNum);
 		}finally{
 			sqlSession.close();
@@ -310,5 +325,35 @@ public class MybatisMemberDao
 		}
 
 		return scarpList;
+	}
+	
+	public List<Rcp> followRcpCount(int memnum){
+		SqlSession sqlSession=opendb.getSqlSessionFactory().openSession();
+		List<Rcp> followRcpCount=null;
+		String statement;
+		
+		try{
+			statement=namespace+".followRcpCount";         
+			followRcpCount=sqlSession.selectList(statement, memnum);
+		}finally{
+			sqlSession.close();
+		}
+
+		return followRcpCount;
+	}
+	
+	public List<Rcp> followRcp(int memnum){
+		SqlSession sqlSession=opendb.getSqlSessionFactory().openSession();
+		List<Rcp> followRcp=null;
+		String statement;
+		
+		try{
+			statement=namespace+".followRcp";         
+			followRcp=sqlSession.selectList(statement, memnum);
+		}finally{
+			sqlSession.close();
+		}
+
+		return followRcp;
 	}
 }

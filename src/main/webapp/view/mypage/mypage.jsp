@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>    
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -94,7 +95,7 @@ ol, ul {
 	color: #3b3b3b; 
 	border-bottom: 3px solid #ff6d00;
 }
-.itemcard-list {
+/* .itemcard-list {
 	display: table;
 	width: auto;
 	min-width: 100%;
@@ -121,7 +122,7 @@ ol, ul {
     border-radius: 50%;
     top: 30px;
     left: 30px;
-}
+} */
 .lst_recipe {
     width: 1500px;
     position: relative;
@@ -205,6 +206,69 @@ li.btn_add a {
 a{
 	text-decoration: none;
 }
+.lst_follow {
+    width: 968px;
+    margin-bottom: 50px;
+}
+.lst_follow li {
+    position: relative;
+    height: 142px;
+    box-sizing: border-box;
+    border-bottom: 1px solid #e1e1e1;
+    padding: 20px 0 20px 120px;
+}
+.lst_follow .user_follow {
+    overflow: hidden;
+    display: inline-block;
+}
+.lst_follow .user_follow img {
+    position: absolute;
+    top: 20px;
+    left: 0;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+}
+.lst_follow .user_follow>strong {
+    display: inline-block;
+    font-size: 20px;
+    color: #3b3b3b;
+    font-family: Microsoft YaHei,'NST';
+    z-index: 1;
+}
+.lst_follow .user_follow .follow {
+    display: inline-block;
+    color: #979797;
+    font-size: 16px;
+    font-family: Microsoft YaHei,'NSL';
+    margin-left: 10px;
+}
+.lst_follow .user_follow .follow em {
+    color: #e36113;
+    font-style: normal;
+}
+.lst_follow .user_follow .count {
+    font-size: 16px;
+    color: #666666;
+    margin-top: 5px;
+}
+.lst_follow .user_follow .update {
+    position: absolute;
+    bottom: 20px;
+    font-size: 14px;
+    color: #839705;
+}
+.lst_follow .thmb_follow {
+    position: absolute;
+    top: 20px;
+    right: 0;
+}
+.lst_follow .thmb_follow img {
+    width: 100px;
+    height: 100px;
+    float: left;
+    margin-left: 10px;
+}
 </style>
 
 <body>
@@ -285,7 +349,7 @@ a{
 					</a>
 				</span>
 				<p>
-					<a href="<%=request.getContextPath()%>/rcp/content?rcpnum=${rcpList.rcpnum}">
+					<a href="<%=request.getContextPath()%>/rcp/content?rcpnum=${rcpList.rcpnum}" style="color:black">
 						<br><strong>${rcpList.title}</strong><p>${rcpList.foodname}</p>
 					</a>
 				</p>
@@ -312,7 +376,7 @@ a{
 					</a>
 				</span>
 				<p>
-					<a href="<%=request.getContextPath()%>/rcp/content?rcpnum=${scarpList.rcpnum}">
+					<a href="<%=request.getContextPath()%>/rcp/content?rcpnum=${scarpList.rcpnum}" style="color:black">
 						<br><strong>${scarpList.title}</strong><p>${scarpList.foodname}</p>
 					</a>
 				</p>
@@ -322,31 +386,66 @@ a{
 		</ul>		
 	</div>
 	
-	<div class="title" id = "follow" style = "display:none; margin: 0px 200px;padding-bottom: 100px">
+	<div class="title" id = "follow" style = "display:none; margin: 0px 350px;">
 		<c:if test="${followCount==0 }">
-			<h1 style="text-align: center;color: #b7b7b7;font-size: 20px;">아직 팔로우 하신 유저가 없습니다.</h1>
+			<h1 style="text-align: center;color: #b7b7b7;font-size: 20px; padding-bottom: 100px">아직 팔로우 하신 유저가 없습니다.</h1>
 		</c:if>
-		<ul class="itemcard-list">			
-			<c:if test="${followCount != 0 }">
-				<c:forEach var="followList" items="${followList}">
-					<li class="itemcard-list-item">
-						<div class="item">
-						<a href="<%=request.getContextPath()%>/member/mypage?memNum=${followList.memNum}">
-							<div>
-								<img src="<%=request.getContextPath()%>/uploadFile/${followList.profile}">
-							</div>
-							<div>
-								<div>${followList.name}</div>
-							</div>
-						</a>
-						</div>
-					</li>
+		
+		<c:if test="${followCount != 0 }">
+		<c:forEach var="followList" items="${followList}">
+		<ul class="lst_follow">
+			<li>
+			<div class="user_follow">
+				<a href="<%=request.getContextPath()%>/member/mypage?memNum=${followList.memNum}">
+					<img src="<%=request.getContextPath()%>/uploadFile/${followList.profile}">
+				</a>
+				<strong>${followList.name}</strong>
+				<div class="follow">
+					<c:forEach var="followerCount2" items="${followerCount2}">
+					<c:if test="${followList.memNum == followerCount2.followNum}">
+					<em>${followerCount2.count}명</em>이 팔로잉
+					</c:if>
+					</c:forEach>
+					<form>						
+                        <!-- <button type="submit" class="btn_scrap">언팔로우</button> -->
+					</form>
+				</div>
+				<c:forEach var="followRcpCount" items="${followRcpCount}">
+				<c:if test="${followList.memNum == followRcpCount.memnum}">
+				<p class="count">${followRcpCount.rcpcount}개 레시피</p>
+				</c:if>
 				</c:forEach>
-			</c:if>
+				
+				<c:set var="loop" value="false" />
+				<c:forEach var="followRcp" items="${followRcp}">
+					<c:if test="${not loop}">
+					<c:if test="${followList.memNum == followRcp.memnum}">
+						<p class="update">
+						최근등록날짜 : <fmt:formatDate value="${followRcp.reg_date}" type="date" pattern = "yyyy-MM-dd HH:mm" />
+						</p>
+						<c:set var="loop" value="true" />
+					</c:if>
+					</c:if>
+				</c:forEach>				 
+			</div>
+			<div class="thmb_follow">
+				<c:set var="loop2" value="1" />
+				<c:forEach var="followRcp" items="${followRcp}">
+					<c:if test="${loop2<4}">
+					<c:if test="${followList.memNum == followRcp.memnum}">
+						<a class="call_recipe" href="<%=request.getContextPath()%>/rcp/content?rcpnum=${followRcp.rcpnum}">
+						<img src="<%=request.getContextPath()%>/uploadRcpFile/${followRcp.thumbnail}">
+						</a>
+						<c:set var="loop2" value="${loop2+1}" />
+					</c:if>
+					</c:if>
+				</c:forEach>
+			</div>
+			</li>
 		</ul>
+		</c:forEach>
+		</c:if>
 	</div>
-	
-	
 </div>
 
 <script>
