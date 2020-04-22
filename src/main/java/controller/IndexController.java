@@ -63,17 +63,19 @@ public class IndexController {
 		session.setAttribute("cartcount", cartcount);
 		System.out.println("====================");
 		
-		List<Rcp> foodnames =dbPro.rcpAllList();
-		List<Ingredient> ingredients =dbPro.getIngredient();
+		List<Rcp> rcpList =dbPro.rcpAllList();
 		
 		HashSet<String> keywords = new HashSet<String>();
-		for(int i=0;i<foodnames.size();i++){
-			Rcp foodname=foodnames.get(i);
-			keywords.add(foodname.getFoodname());
-		}
-		for(int i=0;i<ingredients.size();i++){
-			Ingredient ingredient=ingredients.get(i);
-			keywords.add(ingredient.getIngredient());
+		
+		for(int i=0;i<rcpList.size();i++){			
+			Rcp rcp=rcpList.get(i);
+			keywords.add(rcp.getFoodname());
+			
+			String[] tags = null;			
+			tags = rcp.getHashtag().split("/");
+			for (int j = 1; j < tags.length; j++) {
+				keywords.add(tags[j]);
+			}
 		}
 		
 		model.addAttribute("keywords", keywords);
@@ -82,16 +84,17 @@ public class IndexController {
 	
 	@RequestMapping(value="/main")
 	public String index(Model m){
-		List<Nutrient> nutrientList =dbPro.getNutrient();
-
-		HashSet<String> nutrients = new HashSet<String>();
-
-		for(int i=0;i<nutrientList.size();i++){
-			Nutrient nutrient=nutrientList.get(i);
-			nutrients.add(nutrient.getFoodgroup());
-		}
+		List<Nutrient> nutrients =dbPro.getNutrient();
+		int memberCnt=dbPro.memberCnt();
+		int rcpCnt=dbPro.rcpAllCount();
+		int rcpReadCnt=dbPro.rcpReadCnt();
+		List<Rcp> top4=dbPro.top4();
 
 		m.addAttribute("nutrients", nutrients);	
+		m.addAttribute("memberCnt", memberCnt);	
+		m.addAttribute("rcpCnt", rcpCnt);	
+		m.addAttribute("rcpReadCnt", rcpReadCnt);
+		m.addAttribute("top4", top4);
 		
 		return "main";
 	}

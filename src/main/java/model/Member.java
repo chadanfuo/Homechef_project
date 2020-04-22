@@ -11,7 +11,6 @@ public class Member implements Serializable{
     private String confirmpasswd;
     private String profile;
 	private String selfIntroduction;
-
 	
     public Member(){}
     
@@ -26,10 +25,9 @@ public class Member implements Serializable{
 		this.name = name;
 		this.passwd = passwd;
 		this.confirmpasswd = confirmpasswd;
-	}
-    
-   
-    public String getEmail() {
+	}    
+
+	public String getEmail() {
 		return email;
 	}
 

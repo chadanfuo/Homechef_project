@@ -126,7 +126,7 @@ height: 200px;
                                     <span class="icon ion-ios-search"></span>
                                     <input type="hidden" name="sorting" value="latest">
                                     <input type="hidden" name="cateNum" value="0">
-                                    <input type="text" class="form-control" name="keyword" placeholder="음식명, 재료명으로 검색해주세요." autocomplete="off">
+                                    <input type="text" class="form-control" name="keyword" placeholder="레시피를 검색해주세요." autocomplete="off">
                                 </div>
                             </form>
 						</div>

@@ -192,7 +192,101 @@
     margin: 0 0 5px 0;
     padding: 6px 13px;
 }
+.hashtag input {
+    width: 800px;
+    height: 45px;
+    border: 1px solid #e1e1e1;
+    background-color: #f5f5f5;
+    text-indent: 20px;
+    font-family: Microsoft YaHei,'NST';
+    font-size: 16px;
+    margin-bottom: 0;
+}
+.hashtag .tag_selected {
+    border: 1px solid #e1e1e1;
+    border-top: none;
+    padding: 20px 22px 30px 22px;
+}
+.hashtag .tag_selected strong {
+    display: block;
+    color: #3b3b3b;
+    font-size: 16px;
+    font-weight: normal;
+    padding-right: 620px;
+    font-family: Microsoft YaHei,'NS';
+    margin-bottom: 12px;
+}
+.hashtag .tag_selected span {
+    border: 1px solid #839705;
+    border-radius: 5px;
+    color: #fff;
+    background: #839705;
+    font-size: 14px;
+    font-family: Microsoft YaHei,'NSL';
+    display: inline-block;
+    margin: 0 5px 5px 0;
+    padding: 5px 8px;
+    cursor: pointer;
+}
+.hashtag .tag_selected span a {
+   	color: white;
+    margin: -2px 0 0 8px;
+}
 </style>
+
+<script>
+function check() {
+	var chk = document.writeForm;
+	
+    if(chk.title.value == '') {
+        alert("레시피 제목을 입력하세요");
+        chk.title.focus();
+        return false;
+    }
+    
+    if(chk.subtitle.value == '') {
+        alert("한줄소개를 입력하세요");
+        chk.subtitle.focus();
+        return false;
+    }
+    
+    if(chk.foodname.value == '') {
+        alert("음식명을 입력하세요");
+        chk.foodname.focus();
+        return false;
+    }
+    
+    if(chk.cookingtime.value == '') {
+        alert("조리시간을 입력하세요");
+        chk.cookingtime.focus();
+        return false;
+    }
+    
+    if(chk.thumbNail.value == '') {
+        alert("썸네일 사진을 등록하세요");
+        chk.thumbNail.focus();
+        return false;
+    }
+    
+    if(!chk.hashtags) {
+        alert("해시태그를 입력하시오");
+        return false;
+    }
+    
+	var checked_items = 0;
+	for (i=0;i<chk.elements.length;i++){
+		if ((chk.elements[i].name == "cateNum") && (chk.elements[i].checked)){
+			checked_items++;
+		}			
+	}
+	if (checked_items == 0)	{
+		alert("적어도 하나의 카테고리 선택하셔야 합니다.")
+		return false;
+	}
+	
+	return true;
+}
+</script>
 
 <body>
 <div class="ricipe_regi">
@@ -220,18 +314,18 @@
 		</div>	
 		<div class="cont_line">
 			<p class="cont_tit">조리시간</p>
-			<input type="text" name="cookingtime" autocomplete="off" style="width:80px;"> 분
+			<input type="number" name="cookingtime" autocomplete="off" style="width:80px;"> 분
 		</div>	
 	</div>
 		
 	<div class="cont_box">
-		<p class="cont_tit">재료정보</p>
+		<p class="cont_tit" style="margin-bottom: 0px">재료정보</p><div style="color: red"> *자동완성을 통해 입력해주세요</div>
 		<table id="ingred_table" class="table">		
 		<tbody id="ingred_tbody">
 			<tr>
 				<td> <input type="text" name="ingredient1" class="ingred_name" placeholder="재료명">  </td>
-				<td> <input type="text" name="quantity1" class="ingred_qnt" placeholder="수량" autocomplete="off" >  </td>
-				<td> ( <input type="text" name="gram1" autocomplete="off"> ) g</td>
+				<td> <input type="text" name="quantity1" class="ingred_qnt" placeholder="수량" autocomplete="off" > </td>
+				<td> ( <input type="number" name="gram1" autocomplete="off" value="0"> ) g</td>
 			</tr>
 		</tbody>
 		</table>
@@ -269,11 +363,19 @@
 	
 	<div class="cont_box">
 		<div class="cont_line">
-			<p class="cont_tit">해시태그</p>
-			<textarea name="hashtag" class="step_cont"></textarea>
+			<p class="cont_tit" style="margin-bottom: 0px">해시태그</p>
+			<div class="hashtag">
+				<input type="text" id="hash-search" placeholder="해시태그를 입력해 주세요" autocomplete="off" style="padding-left: 0px">
+				<div class="tag_selected">
+					<strong>입력된 해시 태그</strong>
+					<div id="hash-index">
+						
+					</div>
+				</div>
+			</div>
 		</div>
 		<div class="cont_line">
-			<p class="cont_tit">카테고리</p>
+			<p class="cont_tit" style="margin-bottom: 0px">카테고리</p>
 			<div class="category">
 				<div>
 				<p class="division">상황별 요리</p>
@@ -356,7 +458,7 @@
 		var rowItem = "<tr>"
 			rowItem += "<td> <input type='text' class='ingred_name' name='ingredient"+j+"' placeholder='재료명' autocomplete='off'> </td>"
 			rowItem += "<td> <input type='text' class='ingred_qnt' name='quantity"+j+"' placeholder='수량' autocomplete='off'> </td>"			
-			rowItem += "<td> ( <input type='text' name='gram"+j+"' autocomplete='off'> ) g</td>"
+			rowItem += "<td> ( <input type='text' name='gram"+j+"' autocomplete='off' value='0'> ) g</td>"
 			rowItem += "<td> <button type='button' class='btn btn-danger' style='cursor:pointer;'> <i class='fa fa-minus'></i> </button> </td>"
 			rowItem += "</tr>"
 		$('#ingred_table').append(rowItem)
@@ -404,6 +506,23 @@
     		reader.readAsDataURL(value.files[0]);
     	}
 	}
+	
+	
+	$("#hash-search").keydown(function (key) {
+		var inputVar=$("#hash-search").val()
+		if(key.keyCode==13){
+			$('#hash-index').append(
+					'<span class="added-tag">'+inputVar+'<a href="javascript:">x</a>'+
+					'<input type="hidden" name="hashtags" value="'+inputVar+'"></span>'
+			);
+			$('#hash-search').val('')
+		}
+		return key.keyCode != 13;
+	});
+	
+	$('#hash-index').on("click", "span", function() {
+		 $(this).remove()
+	});
 </script>
 
 </html>

@@ -165,21 +165,6 @@ public class MybatisRcpDao {
 
 		return division;
 	}
-	
-	public List<Ingredient> getIngredient() {
-		SqlSession sqlSession = opendb.getSqlSessionFactory().openSession();
-		List<Ingredient> ingredients = null;
-		String statement;
-
-		try {
-			statement = namespace + ".getIngredient";
-			ingredients = sqlSession.selectList(statement);
-		} finally {
-			sqlSession.close();
-		}
-
-		return ingredients;
-	}
 
 	public List<Rcp> rcpAllList() {
 		SqlSession sqlSession = opendb.getSqlSessionFactory().openSession();
@@ -348,7 +333,18 @@ public class MybatisRcpDao {
 
 		return count;
 	}
-	
+
+	public int getReadcount(int rcpnum) {
+		SqlSession sqlSession = opendb.getSqlSessionFactory().openSession();
+		int readcount = 0;
+		try {
+			String statement = namespace + ".getReadcount";
+			sqlSession.selectOne(statement);
+		} finally {
+			sqlSession.close();
+		}
+		return readcount;
+	}
 	public int searchCount(String keyword){
 		SqlSession sqlSession=opendb.getSqlSessionFactory().openSession();
 		int count;
@@ -493,7 +489,6 @@ public class MybatisRcpDao {
 			sqlSession.close();
 		}
 	}
-
 	
 	public List<Integer> likeCount() {
 		SqlSession sqlSession = opendb.getSqlSessionFactory().openSession();
@@ -506,6 +501,91 @@ public class MybatisRcpDao {
 			sqlSession.close();
 		}
 		return count;
+	}
+	
+	public List<Rcp> recommend(String[] foods) {
+		SqlSession sqlSession = opendb.getSqlSessionFactory().openSession();
+		List<Rcp> recommendList = null;
+		String statement;
+
+		try {
+			statement = namespace + ".recommend";
+			recommendList = sqlSession.selectList(statement, foods);
+		} finally {
+			sqlSession.close();
+		}
+
+		return recommendList;
+	}
+	
+	public int recommendCount(String[] foods){
+		SqlSession sqlSession=opendb.getSqlSessionFactory().openSession();
+		int count;
+		
+		try{
+			String statement=namespace+".recommendCount"; 
+			count=sqlSession.selectOne(statement, foods);
+		}finally{
+			sqlSession.close();
+		}
+
+		return count;
+	}
+	
+	public List<Nutrient> recNutrient(String[] foods) {
+		SqlSession sqlSession = opendb.getSqlSessionFactory().openSession();
+		List<Nutrient> nutrient = null;
+
+		try {
+			String statement = namespace + ".recNutrient";
+			nutrient = sqlSession.selectList(statement, foods);
+		} finally {
+			sqlSession.close();
+		}
+
+		return nutrient;
+	}
+	
+	public int memberCnt() {
+		SqlSession sqlSession = opendb.getSqlSessionFactory().openSession();
+		int count;
+
+		try {
+			String statement = namespace + ".memberCnt";
+			count = sqlSession.selectOne(statement);
+		} finally {
+			sqlSession.close();
+		}
+
+		return count;
+	}
+	
+	public int rcpReadCnt() {
+		SqlSession sqlSession = opendb.getSqlSessionFactory().openSession();
+		int count;
+
+		try {
+			String statement = namespace + ".rcpReadCnt";
+			count = sqlSession.selectOne(statement);
+		} finally {
+			sqlSession.close();
+		}
+
+		return count;
+	}
+	
+	public List<Rcp> top4() {
+		SqlSession sqlSession = opendb.getSqlSessionFactory().openSession();
+		List<Rcp> top5 = null;
+
+		try {
+			String statement = namespace + ".top4";
+			top5 = sqlSession.selectList(statement);
+		} finally {
+			sqlSession.close();
+		}
+
+		return top5;
 	}
 	
 }

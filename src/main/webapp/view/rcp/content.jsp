@@ -119,6 +119,20 @@ ol, ul {
 	margin: 0 0 16px 16px;
 	line-height: 27px;
 }
+.box_tag {
+    padding-right: 30px;
+}
+.box_tag a {
+    padding: 6px 13px;
+    border: 2px solid #ada9a9;
+    border-radius: 5px;
+    color: #3e3e3e;
+    background: #fff;
+    font-size: 14px;
+    font-family: Microsoft YaHei,'NS';
+    display: inline-block;
+    margin-bottom: 5px;
+}
 </style>
 
 <body>
@@ -230,6 +244,12 @@ ol, ul {
                                                     	</div>
                                                     	
                                                     <h2>태그 정보</h2>
+                                                    <div class="box_tag">
+                                                    	<c:forEach var="tags" items="${tags}" begin="1">
+                                                    	<a href="<%=request.getContextPath()%>/rcp/list?sorting=latest&cateNum=0&keyword=${tags}">${tags}</a>
+                                                    	</c:forEach>
+                                                    </div>
+                                                    
                                                     <h2>레시피 정보</h2>
                                                     <ol class="lst_step">
                                                     	<c:forEach var="rcpContent2" items="${rcpContent2}" varStatus="status">

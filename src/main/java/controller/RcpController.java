@@ -14,6 +14,7 @@ import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
@@ -35,17 +36,19 @@ public class RcpController {
 	
 	@ModelAttribute
 	public void initProcess(Model m){
-		List<Rcp> foodnames =dbPro.rcpAllList();
-		List<Ingredient> ingredients =dbPro.getIngredient();
+		List<Rcp> rcpList =dbPro.rcpAllList();
 		
 		HashSet<String> keywords = new HashSet<String>();
-		for(int i=0;i<foodnames.size();i++){
-			Rcp foodname=foodnames.get(i);
-			keywords.add(foodname.getFoodname());
-		}
-		for(int i=0;i<ingredients.size();i++){
-			Ingredient ingredient=ingredients.get(i);
-			keywords.add(ingredient.getIngredient());
+		
+		for(int i=0;i<rcpList.size();i++){			
+			Rcp rcp=rcpList.get(i);
+			keywords.add(rcp.getFoodname());
+			
+			String[] tags = null;			
+			tags = rcp.getHashtag().split("/");
+			for (int j = 1; j < tags.length; j++) {
+				keywords.add(tags[j]);
+			}
 		}
 		
 		m.addAttribute("keywords", keywords);
@@ -141,6 +144,8 @@ public class RcpController {
 		int scrapCount = dbPro.scrapCount(rcpnum);
 		int checkLike = dbPro.checkLike(loginNum, rcpnum);
 		
+		String[] tags = null;
+		tags=rcpContent.getHashtag().split("/");
 		
 		m.addAttribute("rcpContent", rcpContent);
 		m.addAttribute("rcpContent2", rcpContent2);
@@ -150,7 +155,7 @@ public class RcpController {
 		m.addAttribute("loginNum", loginNum);
 		m.addAttribute("nutrient", nutrient);
 		m.addAttribute("checkLike", checkLike);
-		System.out.println(nutrient.toString());
+		m.addAttribute("tags", tags);
 		
 		return "rcp/content";
 	}
@@ -162,7 +167,7 @@ public class RcpController {
 		category = dbPro.getCategory();
 		
 		List<Nutrient> nutrientList =dbPro.getNutrient();
-		
+	
 		HashSet<String> nutrients = new HashSet<String>();
 		
 		for(int i=0;i<nutrientList.size();i++){
@@ -177,7 +182,8 @@ public class RcpController {
 	}
 
 	@RequestMapping(value = "writePro", method = RequestMethod.POST)
-	public String rcp_writePro(MultipartHttpServletRequest multipart,Rcp rcp, RcpContent rcpContent,String[] cateNum) throws Exception {
+	public String rcp_writePro(MultipartHttpServletRequest multipart,Rcp rcp, RcpContent rcpContent,
+							String[] cateNum, String[] hashtags) throws Exception {
 		HttpSession session = multipart.getSession();	
 	    int memNum=(int) session.getAttribute("memNum");
 	    rcp.setMemnum(memNum);	   
@@ -230,12 +236,18 @@ public class RcpController {
 			categories+="/"+cateNum[i];
 		}
 		
+		String hashtag = "";
+		
+		for(int i=0;i<hashtags.length;i++){			
+			hashtag+="/"+hashtags[i];
+		}
+		
 		rcp.setCategory(categories);
+		rcp.setHashtag(hashtag);
 		
 	    dbPro.insertRcp(rcp);
 		
-	    return "redirect:/member/mypage?memNum="+memNum;
-	    /*return "redirect:/main";*/
+	    return "redirect:/member/mypage?memNum="+memNum;	   
 	}
 
 	@RequestMapping(value = "addLike", method = RequestMethod.POST)
@@ -287,5 +299,25 @@ public class RcpController {
 		System.out.println("좋아요 취소");
 
 		return "redirect:/rcp/content?rcpnum=" + rcpnum;
+	}
+	
+	@SuppressWarnings("null")
+	@RequestMapping(value = "recommend", method = RequestMethod.POST)
+	public String rcp_recommend(String[] foods, Model m) throws Exception {		
+		if(foods==null){
+			foods=new String[]{""};
+		}
+		
+		List<Division> division=dbPro.getDivision();
+		List<Nutrient> recNutrients =dbPro.recNutrient(foods);
+		List<Rcp> recommendList=dbPro.recommend(foods);
+		int recommendCount = dbPro.recommendCount(foods);
+		
+		m.addAttribute("recommendList", recommendList);
+		m.addAttribute("recommendCount", recommendCount);
+		m.addAttribute("division", division);
+		m.addAttribute("recNutrients", recNutrients);
+		
+		return "rcp/recommendList";
 	}
 }
