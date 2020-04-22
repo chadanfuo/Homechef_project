@@ -30,7 +30,7 @@ import model.Rcp;
 import model.Scrap;
 import model.User;
 import service.MybatisMemberDao;
-import service.MybatisRcpDaoMysql;
+import service.MybatisRcpDao;
 import util.JdbcUtil;
 
 @Controller
@@ -39,7 +39,7 @@ public class MemberController {
 	@Autowired
 	MybatisMemberDao dbPro;
 	@Autowired
-	MybatisRcpDaoMysql dbPro2;
+	MybatisRcpDao dbPro2;
 
 	@ModelAttribute
 	public void initProcess(Model m){

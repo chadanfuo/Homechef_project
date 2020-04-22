@@ -35,7 +35,7 @@ import model.Rcp;
 import model.Sale;
 import model.Salecategory;
 import service.BrandRepository;
-import service.MybatisRcpDaoMysql;
+import service.MybatisRcpDao;
 import service.ShoppingRepository;
 import util.JdbcUtil;
 
@@ -47,7 +47,7 @@ public class IndexController {
 	ShoppingRepository shopService;
 	
 	@Autowired
-	MybatisRcpDaoMysql dbPro;
+	MybatisRcpDao dbPro;
 	
 	@ModelAttribute
 	public void initProcess(HttpSession session, Model model) {

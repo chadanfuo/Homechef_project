@@ -17,7 +17,7 @@ import model.RcpContent;
 import mybatis.AbstractRepository;
 
 @Component
-public class MybatisRcpDaoMysql {
+public class MybatisRcpDao {
 	private final String namespace = "mybatis.RcpMapper";
 
 	@Autowired
@@ -158,6 +158,19 @@ public class MybatisRcpDaoMysql {
 		try {
 			String statement = namespace + ".getDivision3";
 			division = sqlSession.selectList(statement, cateNum);
+		} finally {
+			sqlSession.close();
+		}
+
+		return division;
+	}
+	public Division getDivision4(int cateNum) {
+		SqlSession sqlSession = opendb.getSqlSessionFactory().openSession();
+		Division division = null;
+
+		try {
+			String statement = namespace + ".getDivision3";
+			division = sqlSession.selectOne(statement, cateNum);
 		} finally {
 			sqlSession.close();
 		}
