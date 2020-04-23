@@ -6,30 +6,72 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    
+<script>
+$(document).ready(function(){
+	
+	$( ".bg-primary" ).css( "display","none" );
+	$( "nav" ).css( "display","none" );
+	$( "footer" ).css( "display","none" );
+	
+})
+function open(menu) {
+		  var i;
+		  var x = document.getElementsByClassName("menu");
+		  for (i = 0; i < x.length; i++) {
+			 console.log(x[i]);
+		    x[i].style.display = "none";
+		  }
+		  alert(menu);
+		  document.getElementById(menu).style.display = "block";
+		}
+/* var divisionlist = new Array();
+<c:forEach items="${division }" var="d">
+divisionlist.push("${d.division_name}");
+</c:forEach>
+for(var i=0; i<divisionlist.length; i++){
+	console.log(divisionlist[i]);
+} */
+</script>
 <title>추천 메뉴</title>
 </head>
 <body>
-오늘의 <span id="city">${city }</span> 날씨는<br>
-<%-- <jsp:useBean id="now" class="java.util.Date" />
-<fmt:formatDate value="${now}" pattern="HH" var="hour" /> --%>
-<p>${hour}</p>
-<c:if test="${hour<12}">
-${weather.amimg }<br>
-${weather.amdes }<br>
-${weather.amtemp }<br>
-${weather.amrain }<br>
-</c:if>
-<c:if test="${hour>=12}">
-${weather.pmimg }<br>
-${weather.pmdes }<br>
-${weather.pmtemp }<br>
-${weather.pmrain }<br>
-</c:if>
-<p>오늘의 추천메뉴</p>
-${category.division_num}
-<a href="${pageContext.request.contextPath }/rcp/list?sorting=readCount&cateNum=${category.division_num}">${category.division_name}</a>
+<div class="container">
+	<h2>오늘 뭐 먹지?</h2>
+	<div id="weather" class="menu">
+		오늘의 <span id="city" style="font-size: 18px;font-weight: bold;">${city }</span> 날씨는<br>
+		<div>
+		<c:if test="${hour<12}">
+		<div style="width : 50%;">
+		${weather.amimg }<br>
+		${weather.amdes }<br>
+		</div>
+		<div style="width : 50%;">
+		<span style="font: 50px;">${weather.amtemp }℃</span>
+		<span>${weather.amrain }%</span>
+		</div>
+		</c:if>
+		<c:if test="${hour>=12}">
+		<div class="col-md-6" style="width : 50%;">
+		${weather.pmimg }<br>
+		${weather.pmdes }<br>
+		</div>
+		<div class="col-md-6" style="width : 50%;">
+		<span style="font-size: 50px;">${weather.pmtemp }℃</span><br>
+		${weather.pmrain }%<br>
+		</div>
+		</c:if>
+		</div>
+		<div>
+		<h3>날씨맞춤의 추천메뉴</h3>
+		
+		<a href="${pageContext.request.contextPath }/rcp/list?sorting=readCount&cateNum=${category.division_num}">${category.division_name}</a>
+		</div>	  	
+	</div>
+  
+</div>
+
 
 
 </body>

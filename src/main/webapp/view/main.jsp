@@ -126,6 +126,7 @@
 </style>
 
 <script type="text/javascript"> 
+var win = window.open("${pageContext.request.contextPath}/recommend/weather", "weather", "width=300,height=450");
 
 var email='${email}';
 var exptext = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-Za-z0-9\-]+/;

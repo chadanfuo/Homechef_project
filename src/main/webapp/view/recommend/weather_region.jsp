@@ -13,31 +13,31 @@
 		var result = null;
 		switch(city){
 		case "Seoul" : 
-		case "Gyeonggi-do" : result = "서울경기";break;
+		case "Gyeonggi-do" : result = "서울 경기";break;
 		
 		case "Gangwon" : 
-		case "Gangwon-do" : result = "강원영동";break; 
+		case "Gangwon-do" : result = "강원 영동";break; 
 		
 		case "Chungbuk" : 
-		case "Chung-cheong bukdo" : result = "충청북도";break; 
+		case "Chung-cheong bukdo" : result = "충청 북도";break; 
 		
 		case "Chungnam" : 
-		case "Chungcheongnam-do" : result = "충청남도";break; 
+		case "Chungcheongnam-do" : result = "충청 남도";break; 
 		
 		case "Gyeongbuk" : 
-		case "Gyeongsangbuk-do" : result = "경상북도";break; 
+		case "Gyeongsangbuk-do" : result = "경상 북도";break; 
 		
 		case "Gyeongnam" : 
-		case "Gyeongsangnam-do" : result = "경상남도";break; 
+		case "Gyeongsangnam-do" : result = "경상 남도";break; 
 		
 		case "Ulleungdo" : 
-		case "Dokdo" : result = "울릉독도";break;
+		case "Dokdo" : result = "울릉 독도";break;
 		
 		case "Jeonnam" : 
-		case "Jeollanam-do" : result = "전라남도";break;
+		case "Jeollanam-do" : result = "전라 남도";break;
 		
 		case "Jeonbuk" : 
-		case "Jeollabuk do" : result = "전라북도";break;
+		case "Jeollabuk do" : result = "전라 북도";break;
 		
 		case "Jeju" : 
 		case "Jeju Island" : result = "제주";break; 

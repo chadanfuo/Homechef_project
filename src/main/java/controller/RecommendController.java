@@ -57,56 +57,60 @@ public class RecommendController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		Elements elem = doc.select(".tbl_weather tbody tr");
-		String[] str = elem.text().split(" ");
+		
+		List<String> regionlist = new ArrayList<>();
+		Elements regionname = doc.select(".tbl_weather tbody th a");
+		for(Element a : regionname){
+			regionlist.add(a.text());
+		}
+		List<String> desclist = new ArrayList<>();
+		Elements desc = doc.select(".tbl_weather tbody li.nm");
+		for(Element a : desc){
+			desclist.add(a.text());
+		}
+		List<String> templist = new ArrayList<>();
+		Elements tempor = doc.select(".tbl_weather tbody span.temp strong");
+		for(Element a : tempor){
+			templist.add(a.text());
+		}
+		List<String> rainlist = new ArrayList<>();
+		Elements rainper = doc.select(".tbl_weather tbody span.rain strong");
+		for(Element a : rainper){
+			rainlist.add(a.text());
+		}
+		
+		System.out.println(regionlist);
+		System.out.println(desclist);
+		System.out.println(templist);
+		System.out.println(rainlist);
+		
 		// 이미지 크롤링
 		Elements img = doc.select(".tbl_weather tbody tr td img");
-		
-		List<String> weatherlist = splite_weather(str);
 		Map<String, Weather> weather = new HashMap<String, Weather>();
-		
-		int index = 0;
-		System.out.println("list : " + weatherlist);
+		int timeindex = 0;
 		//weather 객체에 저장후, hashmap에 지역별 저장
-		for (String s : weatherlist) {
+		for (String r : regionlist) {
 			Weather objweather = new Weather();
-			System.out.println("s : " + s);
-			String[] t =s.split(",");
-			String region = "";
+			System.out.println("region : " + r);
+			//오전과 오후 구분
+			objweather.setAmdes(desclist.get(timeindex));
+			objweather.setAmimg(img.get(timeindex));
+			objweather.setAmrain(rainlist.get(timeindex));
+			objweather.setAmtemp(templist.get(timeindex));
+			objweather.setPmdes(desclist.get(timeindex+1));
+			objweather.setPmimg(img.get(timeindex+1));
+			objweather.setPmrain(rainlist.get(timeindex+1));
+			objweather.setPmtemp(templist.get(timeindex+1));	
 			
-			for(int i = 0; i<t.length;i++){
-				if(s.contains("제주")){
-					region = t[0];
-					objweather.setAmdes(t[1]); 
-					objweather.setAmtemp(t[3]); 
-					objweather.setAmrain(t[5]);
-					objweather.setPmdes(t[6]);
-					objweather.setPmtemp(t[8]);
-					objweather.setPmrain(t[10]);
-					break;
-				}
-				if(i<2){
-					region+=t[i];
-				}
-				switch(i){
-					case 2 : objweather.setAmdes(t[i]); break;
-					case 4 : objweather.setAmtemp(t[i]); break;
-					case 6 : objweather.setAmrain(t[i]); break;
-					case 7 : objweather.setPmdes(t[i]); break;
-					case 9 : objweather.setPmtemp(t[i]); break;
-					case 11 : objweather.setPmrain(t[i]); break;
-				}
-			};
-			objweather.setAmimg(img.get(index));
-			objweather.setPmimg(img.get(index+1));
-			index+=2;//이미지저장 인덱스, 오전 오후 저장하기 위해
-			weather.put(region, objweather);
-			System.out.println(region + " : "+objweather);
+			weather.put(r, objweather);
+			System.out.println(r + " : "+objweather);
+			timeindex+=2;
 		}
 		System.out.println("===========");
 		System.out.println(weather);
 		System.out.println(city);
 		Weather cityWeather = weather.get(city);
+		System.out.println(cityWeather.toString());
 		//시간 가져오기
 		SimpleDateFormat format = new SimpleDateFormat ( "MM,HH");
 		String fmt_time = format.format(System.currentTimeMillis());
@@ -125,13 +129,12 @@ public class RecommendController {
 		int rain = 0;
 		int temp = 0;
 		System.out.println();
-		if(hour<12){								//20% ->20
-			rain = Integer.parseInt(cityWeather.getAmrain().substring(0,cityWeather.getAmrain().length()-1));
-			temp = Integer.parseInt(cityWeather.getAmtemp().substring(0,cityWeather.getAmtemp().length()-3));
-													//4.0℃ ->4
+		if(hour<12){		
+			rain = Integer.parseInt(cityWeather.getAmrain());
+			temp = (int) Double.parseDouble(cityWeather.getAmtemp());
 		}else{
-			rain = Integer.parseInt(cityWeather.getPmrain().substring(0,cityWeather.getPmrain().length()-1));
-			temp = Integer.parseInt(cityWeather.getPmtemp().substring(0,cityWeather.getPmtemp().length()-3));
+			rain = Integer.parseInt(cityWeather.getPmrain());
+			temp = (int) Double.parseDouble(cityWeather.getPmtemp());
 		}
 		switch((int)rain/10){
 			case 0:
@@ -197,15 +200,17 @@ public class RecommendController {
 		
 		
 		Division cate = dbPro.getDivision4(catenum);
+		List<Division> division = dbPro.getDivision();
 		
 		System.out.println(cate.toString());
 		System.out.println(cate.getDivision_num());
 		System.out.println(cate.getDivision_name());
 		System.out.println(weather.get(city));
 		
+		model.addAttribute("division",division);
 		model.addAttribute("hour", hour);
 		model.addAttribute("city", city);
-		model.addAttribute("weather", weather.get(city));
+		model.addAttribute("weather", cityWeather);
 		model.addAttribute("category", cate);
 		return "recommend/weatherForm";
 	}
