@@ -6,8 +6,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css">
 </head>
-
 <style>
 .box_write {
     background-color: #f7f7f7;
@@ -97,7 +97,6 @@ ol, ul {
 .lst_step img {
   	display: block;
     width: 600px;
-    height: 340px;
     margin: 0 auto 13px;
 }
 .lst_step p {
@@ -119,6 +118,20 @@ ol, ul {
 	margin: 0 0 16px 16px;
 	line-height: 27px;
 }
+.box_tag {
+    padding-right: 30px;
+}
+.box_tag a {
+    padding: 6px 13px;
+    border: 2px solid #ada9a9;
+    border-radius: 5px;
+    color: #3e3e3e;
+    background: #fff;
+    font-size: 14px;
+    font-family: Microsoft YaHei,'NS';
+    display: inline-block;
+    margin-bottom: 5px;
+}
 </style>
 
 <body>
@@ -128,8 +141,7 @@ ol, ul {
             <!-- Boxes de Acoes -->
             <div class="col-xs-12 col-sm-6 col-lg-8">
                 <div class="box" style="width: 1000px">
-                    <div class="icon">
-                        <div class="image"><i class="fa fa-soundcloud"></i></div>
+                    <div class="icon">                        
                         <div class="info">
 
                             <!-- Modal -->
@@ -230,6 +242,12 @@ ol, ul {
                                                     	</div>
                                                     	
                                                     <h2>태그 정보</h2>
+                                                    <div class="box_tag">
+                                                    	<c:forEach var="tags" items="${tags}" begin="1">
+                                                    	<a href="<%=request.getContextPath()%>/rcp/list?sorting=latest&cateNum=0&keyword=${tags}">${tags}</a>
+                                                    	</c:forEach>
+                                                    </div>
+                                                    
                                                     <h2>레시피 정보</h2>
                                                     <ol class="lst_step">
                                                     	<c:forEach var="rcpContent2" items="${rcpContent2}" varStatus="status">
@@ -292,15 +310,45 @@ ol, ul {
                                                             	<c:if test="${checkScrap==0}">
                                                             	<form action="<%=request.getContextPath()%>/member/scrap" method="post">                                                                    
                                                                     <input type="hidden" name="scrapnum" value="${rcpContent.rcpnum}">
-                                                                    <button type="submit" class="btn_scrap">스크랩</button>
+                                                                    <button type="submit" class="btn_scrap"><i class="far fa-bookmark"></i> &nbsp;스크랩</button>
                                                                 </form>
                                                             	</c:if>
                                                             	<c:if test="${checkScrap==1}">
                                                             	<form action="<%=request.getContextPath()%>/member/delScrap" method="post">                                                                    
                                                                     <input type="hidden" name="scrapnum" value="${rcpContent.rcpnum}">
-                                                                    <button type="submit" class="btn_scrap">스크랩취소</button>
+                                                                    <button type="submit" class="btn_scrap"><i class="fas fa-bookmark"></i> &nbsp;스크랩 취소</button>
                                                                 </form>
                                                             	</c:if>
+                                                            	<!-- 좋아요 버튼 영역 추가 -->
+														<c:if test="${checkLike == 0}">
+														<div class="btn_area">
+															<form action="<%=request.getContextPath()%>/rcp/addLike"
+																method="POST">
+																<input type="hidden" name="rcpnum"
+																	value="${rcpContent.rcpnum}"><span
+																	style="font-size: 30px; color: red;">
+																	<button type="submit" class="btn_like">
+																		<i class="far fa-heart"></i> &nbsp;좋아요</button>
+																</span>
+															</form>
+														</div>
+														</c:if>
+														<c:if test="${checkLike == 1}">
+														<div class="btn_area">
+															<form action="<%=request.getContextPath()%>/rcp/cancelLike"
+																method="POST">
+																<input type="hidden" name="rcpnum"
+																	value="${rcpContent.rcpnum}"><span
+																	style="font-size: 30px;">
+																	<button type="submit" class="btn_like">
+																		<i class="fas fa-heart"></i> &nbsp;좋아요 취소</button>
+																</span>
+															</form>
+														</div>
+														</c:if>
+                                                            	
+                                                            	
+                                                            	
                                                             </c:if>                                                             
                                                             </div>
                                                             <!-- //버튼영역 추가 -->

@@ -276,11 +276,12 @@ public class ShoppingRepository{
 		}
 	}
 	
-	public void insertOrderForm(OrderInfo orderinfo, OrderProduct ordpro, int[] nums) {
+	public void insertOrderForm(OrderInfo orderinfo, List<Integer> nums) {
 		// TODO Auto-generated method stub
 		SqlSession sqlSession = opendb.getSqlSessionFactory().openSession();
 		Cart cart = new Cart(); 
-	
+		OrderProduct ordpro = new OrderProduct();
+		
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
 		String strDate = sdf.format(new Date());
 		Long ordernum = Long.parseLong((String)strDate+orderinfo.getMemNum());

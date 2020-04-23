@@ -105,5 +105,14 @@ public class Nutrient implements Serializable {
 		this.chole = chole;
 	}
 
+	@Override
+	public String toString() {
+		return "Nutrient [nutrient_num=" + nutrient_num + ", foodgroup=" + foodgroup + ", food=" + food + ", energy="
+				+ energy + ", protein=" + protein + ", fat=" + fat + ", carb=" + carb + ", sugar=" + sugar + ", cal="
+				+ cal + ", na=" + na + ", chole=" + chole + "]";
+	}
+	
+	
+
 		
 }

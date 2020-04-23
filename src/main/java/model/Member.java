@@ -11,9 +11,54 @@ public class Member implements Serializable{
     private String confirmpasswd;
     private String profile;
 	private String selfIntroduction;
-
 	
-    public Member(){}
+	private int rank;
+	private int readcnt;
+	private int rcpcnt;
+	private int followcnt;
+	private int likecnt;
+	
+    public int getLikecnt() {
+		return likecnt;
+	}
+
+	public void setLikecnt(int likecnt) {
+		this.likecnt = likecnt;
+	}
+
+	public int getRank() {
+		return rank;
+	}
+
+	public void setRank(int rank) {
+		this.rank = rank;
+	}
+
+	public int getReadcnt() {
+		return readcnt;
+	}
+
+	public void setReadcnt(int readcnt) {
+		this.readcnt = readcnt;
+	}
+
+	public int getRcpcnt() {
+		return rcpcnt;
+	}
+
+	public void setRcpcnt(int rcpcnt) {
+		this.rcpcnt = rcpcnt;
+	}
+
+	public int getFollowcnt() {
+		return followcnt;
+	}
+
+	public void setFollowcnt(int followcnt) {
+		this.followcnt = followcnt;
+	}
+
+	public Member(){}
     
     public Member(String email, String name, String passwd) {
 		this.email = email;
@@ -26,10 +71,9 @@ public class Member implements Serializable{
 		this.name = name;
 		this.passwd = passwd;
 		this.confirmpasswd = confirmpasswd;
-	}
-    
-   
-    public String getEmail() {
+	}    
+
+	public String getEmail() {
 		return email;
 	}
 

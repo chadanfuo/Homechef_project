@@ -7,6 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <title>list</title>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css">
 </head>
 
 <style>
@@ -44,7 +45,7 @@
 }
 .lst_recipe li .author {
     text-align: center;
-    width: 0;
+    width: 60px;
     z-index: 5;
     display: block;
     margin-top: -40px;
@@ -57,7 +58,8 @@
     border-radius: 50%;
     overflow: hidden;
     display: block;
-    margin: 0 auto 5px;
+    margin: 10px 0 -10px;
+    max-width: initial;
 }
 .lst_recipe li p {
     text-align: center;
@@ -74,12 +76,6 @@
     word-break: keep-all;
     white-space: nowrap;
     text-overflow: ellipsis;
-}
-a:link{
-	color:black;
-}
-a:visited{
-	color:black;
 }
 .search_cate {
     background: #fff;
@@ -268,6 +264,21 @@ a {
     color: #fff;
 }
 .selected { background:red }
+.lst_recipe .option {
+    width: 263px;
+    position: absolute;
+    bottom: 0;
+    height: 27px;
+    border-top: 1px solid #e1e1e1;
+    text-align: center;
+}
+.lst_recipe .option>div {
+	border: none;
+    width: 130px;
+    height: 100%;
+    float: left;
+    border-left: 1px solid #ddd;
+}
 </style>
 
 <c:if test='${keyword.equals("") }'>
@@ -374,12 +385,7 @@ a {
 		</c:if>
 	</div>
 	
-	<ul class="lst_recipe">		
-		<c:if test="${rcpAllCount==0}">
-			<h1 style="font-size: 50px">등록된 레시피가 없습니다.</h1>
-		</c:if>
-			
-		<c:if test="${rcpAllCount!=0}">
+	<ul class="lst_recipe">					
 		<c:forEach var="rcpAllList" items="${rcpAllList}">
 		<li>
 			<a href="<%=request.getContextPath()%>/rcp/content?rcpnum=${rcpAllList.rcpnum}" data-toggle="modal" class="call_recipe">
@@ -395,9 +401,23 @@ a {
 					<br><strong>${rcpAllList.title}</strong><p>${rcpAllList.foodname}</p>
 				</a>
 			</p>
+			
+			<div class="option">
+				<div class="time">
+				<i class="far fa-clock"></i>&nbsp;&nbsp;${rcpAllList.cookingtime}분
+				</div>
+				<div class="like">
+				<i class="fas fa-heart"></i>&nbsp;&nbsp;${rcpAllList.likecnt}명
+				</div>
+			</div>
+			<!-- 좋아요 버튼 -->
+			<%-- <div class="btn_area">
+				<span style="font-size:13px; color: red;">
+					<i class="fas fa-heart"></i></span>
+						<c:forEach var="likes" items="${likes.likecnt}"></c:forEach>
+			</div> --%>
 		</li>
 		</c:forEach>
-		</c:if>		
 	</ul>	
 </div>
 

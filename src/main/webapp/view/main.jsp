@@ -7,125 +7,8 @@
 <title>Insert title here</title>
 </head>
 
-<style>
-.recommend {
-    background: #e66768;
-    padding: 57px 0 62px 0;
-}
-.recommend h2 {
-    text-align: center;
-    font-size: 40px;
-    color: #fff332;
-    font-family: Microsoft YaHei,'NSB';
-}
-.recommend form {
-    width: 840px;
-    overflow: hidden;
-    margin: 25px auto;
-}
-.field1 {
-    width: 595px;
-    float: left;
-}
-.recommend input {
-    box-sizing: border-box;
-    width: 595px;
-    height: 59px;
-    background: #fff url(/assets/_img/main/ico_srch_recommand-3c2b4b9….png) 96% center no-repeat;
-    border: #a73f40 solid 1px;
-    float: left;
-    padding-left: 20px;
-    font-size: 20px;
-    color: #000;
-    margin-bottom: 9px;
-    outline: none;
-}
-.field1>ul {
-    height: 270px;
-    border: 1px solid #a73f40;
-    background: #fff;
-    float: left;
-    overflow-x: hidden;
-    overflow-y: visible;
-}
-.big_sort {
-    width: 190px;
-    margin-right: 9px;
-    box-sizing: border-box;
-}
-.big_sort li {
-    font-size: 15px;
-    border-bottom: 1px solid #dddddd;
-}
-.big_sort li a {
-    color: #cc4244;
-    display: block;
-    line-height: 44px;
-    padding-left: 18px;
-}
-.small_sort {
-    width: 396px;
-    padding: 10px 13px;
-    font-family: Microsoft YaHei,'NS';
-    box-sizing: border-box;
-}
-.field2 {
-    width: 235px;
-    float: right;
-}
-.field2 dl {
-    border: 1px solid #a73f40;
-    background: #fff;
-    position: relative;
-}
-.field2 dt {
-    height: 59px;
-    font-size: 20px;
-    padding: 10px 15px;
-    font-family: Microsoft YaHei,'NSL';
-    box-sizing: border-box;
-    color: #e66768;
-    border-bottom: 1px solid #dddddd;
-}
-.field2 dd {
-    height: 277px;
-    box-sizing: border-box;
-}
-.field2 dd ul {
-    height: 205px;
-    padding: 12px 0;
-    overflow-x: hidden;
-    overflow-y: visible;
-    box-sizing: border-box;
-}
-.field2 dd ul li.no-content {
-    float: none;
-    font-size: 17px;
-    color: #b7b7b7;
-    text-align: center;
-    margin-top: 80px;
-    padding: 0;
-}
-.field2 dd .btn {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    padding: 12px 16px;
-    background-color: #fff;
-}
-.field2 dd .btn button {
-    width: 194px;
-    height: 48px;
-    border-radius: 5px;
-    border: 1px solid #e66768;
-    background: #fff;
-    color: #e66768;
-    font-size: 15px;
-}
-</style>
-
 <script type="text/javascript"> 
+var win = window.open("${pageContext.request.contextPath}/recommend/weather", "weather", "width=300,height=450");
 
 var email='${email}';
 var exptext = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-Za-z0-9\-]+/;
@@ -147,10 +30,135 @@ if ($('#email') != null) {
 });
 
 </script>
-<%--  var message = '${msg}'; 
-var returnUrl = '${url}'; 
-alert(mag); 
-document.location.href = url;   --%>
+
+<script  async=""  src="<%=request.getContextPath()%>/css/recommend/appli.js"></script>	
+	<!-- Latest compiled and minified CSS -->
+	<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css"> -->
+	<!-- main css -->
+	<link rel="stylesheet" href="<%=request.getContextPath()%>/css/recommend/style.css">
+	<!-- <link rel="stylesheet" href="css/responsive.css"> -->
+	<link rel="stylesheet" media="all" href="<%=request.getContextPath()%>/css/recommend/application.css">	
+	<script async="" src="<%=request.getContextPath()%>/css/recommend/analytics.js"></script>
+	<link rel="stylesheet" media="all" href="<%=request.getContextPath()%>/css/recommend/application-d1.css">
+	<script src="<%=request.getContextPath()%>/css/recommend/application-8a.js"></script>
+	<script src="<%=request.getContextPath()%>/css/recommend/jquery.animateNumber.min.js"></script>
+	<script> var rec = jQuery.noConflict(); </script>
+	
+	<script>
+	rec(function () {		
+		rec( "#tabs" ).tabs();		
+		rec(document).on("keyup", function (e) {
+			if (e.keyCode == 27) {
+			  if (rec("#full-modal-box").hasClass("show")) {
+				full_modal_dismiss();
+			  } else {
+				modal_dismiss();
+			  }
+			}
+		  });		
+		  //	메인 배너 스크립트
+		  var _bOptions = {
+			namespace: "haemuk-",
+			selector: ".banner-slider > li",
+			pauseOnHover: true,
+			controlNav: false,
+			controlsContainer: ".slide_main .btn_area"
+		  }
+		
+		  rec(".slide_main").flexslider(_bOptions);		  
+		  //	메인 재료 추천 호출
+		  call_refrigerator();				
+		});
+		
+		function call_refrigerator() {
+		  ga('send', 'pageview', '/refrigerator');
+		
+		  rec(".search-ingre").on("keypress", function (e) {
+			return e.keyCode != 13;
+		  });
+
+		
+		  // 냉장고 추천 재료검색
+		  rec(".search-ingre").on("focus", function () {
+			var self = rec(this);
+			var field1 = rec(this).parent(".field1");
+			var field2 = field1.next(".field2");
+			var list = field2.find(".selected-ingre");
+			
+			var keywords = [
+		    	<c:forEach var="nutrients" items="${nutrients}">
+		    	{ label: '${nutrients.food}', value: '${nutrients.nutrient_num}' },
+				</c:forEach>
+		    ];
+		    
+			rec(this).autocomplete({
+			      source: keywords,
+			      max: 10,
+			      focus: function(event, ui) {
+			          return false;
+			      },
+			      
+			      select: function (event, ui) {			    	  	
+						field2.find(".no-content").remove();						
+				
+						list.append(
+							  "<li>" +
+								  "<input type='hidden' name='foods' value='" + ui.item.value + "'>" +
+								  "<a href='javascript:;'><em></em>" + ui.item.label + "</a>" +
+								  "</li>"
+						  );
+					},
+					
+				close:function(event){
+					$(this).val('');
+				}
+			})
+		  });
+	
+		  rec(".big_sort").on("click", "a", function () {
+			var group_id = rec(this).attr("data-id");
+			var ingre_list = rec(this).closest(".field1").find(".small_sort");
+			var lists = rec(this).parent("li").siblings();
+		
+			rec(this).addClass("selected");
+			lists.each(function (index, item) {
+				rec(item).find("a").removeClass("selected");
+			});			
+		  });
+		
+		  rec(".small_sort").on("click", "a", function () {
+			var field1 = rec(this).closest(".field1");
+			var field2 = field1.next(".field2");
+			var list = field2.find(".selected-ingre");
+			var id = rec(this).attr("ingre_num");
+			var name = rec(this).find("strong").html();
+			var imgHtml = rec(this).find("img").prop("outerHTML");
+		
+			field2.find(".no-content").remove();
+			field2.find(".selected-ingre").append(
+				  "<li>" +
+					  "<input type='hidden' name='foods' value='" + id + "'>" +
+					  "<a href='javascript:;'><em></em>" + name + "</strong></a>" +
+					  "</li>"
+			);			
+		  });
+		
+		  rec(".selected-ingre").on("click", "a", function () {
+			var field2 = rec(this).closest(".field2");
+			var list = field2.find(".selected-ingre");
+			var id = rec(this).parent("li").find("input[type=hidden]").val();
+		
+			rec(this).parent("li").remove();
+		
+			if (list.find("li").length == 0) {
+			  list.append('<li class="no-content">재료를 선택해주세요.</li>');
+			}
+		
+			field2.prev(".field1").find("a[ingre_num=" + id + "]").removeClass("selected");
+		  });
+		}
+</script>
+
 <body>
 
     <section id="home-section" class="hero">
@@ -163,7 +171,7 @@ document.location.href = url;   --%>
                         <div class="col-md-12 ftco-animate text-center">
                             <h1 class="mb-2"><spring:message code="mainslidetitle" />  </h1>
                             <h2 class="subheading mb-4">We deliver organic vegetables &amp; fruits</h2>
-                            <p><a href="#" class="btn btn-primary"><spring:message code="viewdetail" /></a></p>
+                            <p><a href="<%=request.getContextPath()%>/rcp/list?sorting=latest&cateNum=0" class="btn btn-primary"><spring:message code="viewdetail" /></a></p>
                         </div>
 
                     </div>
@@ -178,7 +186,7 @@ document.location.href = url;   --%>
                         <div class="col-sm-12 ftco-animate text-center">
                             <h1 class="mb-2">100% Fresh &amp; Organic Foods</h1>
                             <h2 class="subheading mb-4">We deliver organic vegetables &amp; fruits</h2>
-                            <p><a href="#" class="btn btn-primary"><spring:message code="viewdetail" /></a></p>
+                            <p><a href="<%=request.getContextPath()%>/shop" class="btn btn-primary"><spring:message code="viewdetail" /></a></p>
                         </div>
 
                     </div>
@@ -187,41 +195,232 @@ document.location.href = url;   --%>
         </div>
     </section>
     
-    <section class="recommend">
-    	<div class="container">
-    	<h2>내가 가진 재료로 레시피 추천받기</h2>
-    	<form>
-    	<fieldset class="field1">
-    		<input type="text" class="search-ingre" placeholder="재료명으로 검색해보세요." autocomplete="off">
-    		<ul class="big_sort">
-    			<c:forEach var="nutrients" items="${nutrients}">
-    			<li>
-    				<a href="javascript:;">${nutrients}</a>
-    			</li>
-    			</c:forEach>
-    		</ul>
-    		<ul class="small_sort">
-    			
-    				
-    		</ul>
-    	</fieldset>
-    	
-    	<fieldset class="field2">
-    		<dl>
-    			<dt>내가 선택한 자료</dt>
-    			<dd style="margin-bottom:0">
-    				<ul class="selected-ingre">                  
-                		<li class="no-content">재료를 선택해주세요.</li>
-                	</ul>
-                	<div class="btn">
-                		<button type="submit">이 재료로 추천받기</button>
-                	</div>
-    			</dd>
-    		</dl>
-    	</fieldset>    				
-    	</form>
-    	</div>
-    </section>
+    <section class="sec_recommend">
+		<div class="container">
+			<h2>내가 가진 재료로 레시피 추천받기</h2>
+			<form action="<%=request.getContextPath()%>/rcp/recommend"  id="tabs" accept-charset="UTF-8" method="POST">
+				<fieldset class="field1">
+					<input type="text" class="search-ingre" placeholder="재료명으로 검색해보세요." autocomplete="off">
+					<button class="btn_search">검색</button>
+					<h3>대분류</h3>
+					<ul class="big_sort" >
+						<li><a class="selected"  href="#tabs-1" >곡류및그제품</a></li>
+						<li><a class=""  href="#tabs-2">감자류및전분류</a></li>
+						<li><a class=""  href="#tabs-3">당류</a></li>
+						<li><a class=""  href="#tabs-4">두류</a></li>
+						<li><a class=""  href="#tabs-5">견과류및종실류</a></li>
+						<li><a class=""  href="#tabs-6">채소류</a></li>
+						<li><a class=""  href="#tabs-7">버섯류</a></li>
+						<li><a class=""  href="#tabs-8">과일류</a></li>
+						<li><a class=""  href="#tabs-9">육류</a></li>
+						<li><a class=""  href="#tabs-10">난류</a></li>
+						<li><a class=""  href="#tabs-11">어패류및기타수산물</a></li>
+						<li><a class=""  href="#tabs-12">해조류</a></li>
+						<li><a class=""  href="#tabs-13">우유및유제품류</a></li>
+						
+					</ul>
+					
+					<h3>소분류</h3>
+					<div id="tabs-1"> 		
+					<ul class="small_sort" >
+					<c:forEach var="nutrients" items="${nutrients}">						
+						<c:if test="${nutrients.foodgroup.equals('곡류및그제품')}">
+							<li>
+							<a  href="javascript:;" ingre_num="${nutrients.nutrient_num}">
+								<em></em>								
+								<strong>${nutrients.food}</strong>
+							</a> 
+							</li>
+						</c:if>
+					</c:forEach>						
+					</ul>
+					</div>
+					<div id="tabs-2"> 		
+					<ul class="small_sort" >
+					<c:forEach var="nutrients" items="${nutrients}">						
+						<c:if test="${nutrients.foodgroup.equals('감자류및전분류')}">
+							<li>
+							<a  href="javascript:;" ingre_num="${nutrients.nutrient_num}">
+								<em></em>								
+								<strong>${nutrients.food}</strong>
+							</a> 
+							</li>
+						</c:if>
+					</c:forEach>						
+					</ul>
+					</div>
+					<div id="tabs-3"> 		
+					<ul class="small_sort" >
+					<c:forEach var="nutrients" items="${nutrients}">						
+						<c:if test="${nutrients.foodgroup.equals('당류')}">
+							<li>
+							<a  href="javascript:;" ingre_num="${nutrients.nutrient_num}">
+								<em></em>								
+								<strong>${nutrients.food}</strong>
+							</a> 
+							</li>
+						</c:if>
+					</c:forEach>						
+					</ul>
+					</div>
+					<div id="tabs-4"> 		
+					<ul class="small_sort" >
+					<c:forEach var="nutrients" items="${nutrients}">						
+						<c:if test="${nutrients.foodgroup.equals('두류')}">
+							<li>
+							<a  href="javascript:;" ingre_num="${nutrients.nutrient_num}">
+								<em></em>								
+								<strong>${nutrients.food}</strong>
+							</a> 
+							</li>
+						</c:if>
+					</c:forEach>						
+					</ul>
+					</div>
+					<div id="tabs-5"> 		
+					<ul class="small_sort" >
+					<c:forEach var="nutrients" items="${nutrients}">						
+						<c:if test="${nutrients.foodgroup.equals('견과류및종실류')}">
+							<li>
+							<a  href="javascript:;" ingre_num="${nutrients.nutrient_num}">
+								<em></em>								
+								<strong>${nutrients.food}</strong>
+							</a> 
+							</li>
+						</c:if>
+					</c:forEach>						
+					</ul>
+					</div>
+					<div id="tabs-6"> 		
+					<ul class="small_sort" >
+					<c:forEach var="nutrients" items="${nutrients}">						
+						<c:if test="${nutrients.foodgroup.equals('채소류')}">
+							<li>
+							<a  href="javascript:;" ingre_num="${nutrients.nutrient_num}">
+								<em></em>								
+								<strong>${nutrients.food}</strong>
+							</a> 
+							</li>
+						</c:if>
+					</c:forEach>						
+					</ul>
+					</div>
+					<div id="tabs-7"> 		
+					<ul class="small_sort" >
+					<c:forEach var="nutrients" items="${nutrients}">						
+						<c:if test="${nutrients.foodgroup.equals('버섯류')}">
+							<li>
+							<a  href="javascript:;" ingre_num="${nutrients.nutrient_num}">
+								<em></em>								
+								<strong>${nutrients.food}</strong>
+							</a> 
+							</li>
+						</c:if>
+					</c:forEach>						
+					</ul>
+					</div>
+					<div id="tabs-8"> 		
+					<ul class="small_sort" >
+					<c:forEach var="nutrients" items="${nutrients}">						
+						<c:if test="${nutrients.foodgroup.equals('과일류')}">
+							<li>
+							<a  href="javascript:;" ingre_num="${nutrients.nutrient_num}">
+								<em></em>								
+								<strong>${nutrients.food}</strong>
+							</a> 
+							</li>
+						</c:if>
+					</c:forEach>						
+					</ul>
+					</div>
+					<div id="tabs-9"> 		
+					<ul class="small_sort" >
+					<c:forEach var="nutrients" items="${nutrients}">						
+						<c:if test="${nutrients.foodgroup.equals('육류')}">
+							<li>
+							<a  href="javascript:;" ingre_num="${nutrients.nutrient_num}">
+								<em></em>								
+								<strong>${nutrients.food}</strong>
+							</a> 
+							</li>
+						</c:if>
+					</c:forEach>						
+					</ul>
+					</div>
+					<div id="tabs-10"> 		
+					<ul class="small_sort" >
+					<c:forEach var="nutrients" items="${nutrients}">						
+						<c:if test="${nutrients.foodgroup.equals('난류')}">
+							<li>
+							<a  href="javascript:;" ingre_num="${nutrients.nutrient_num}">
+								<em></em>								
+								<strong>${nutrients.food}</strong>
+							</a> 
+							</li>
+						</c:if>
+					</c:forEach>						
+					</ul>
+					</div>	
+					<div id="tabs-11"> 		
+					<ul class="small_sort" >
+					<c:forEach var="nutrients" items="${nutrients}">						
+						<c:if test="${nutrients.foodgroup.equals('어패류및기타수산물')}">
+							<li>
+							<a  href="javascript:;" ingre_num="${nutrients.nutrient_num}">
+								<em></em>								
+								<strong>${nutrients.food}</strong>
+							</a> 
+							</li>
+						</c:if>
+					</c:forEach>						
+					</ul>
+					</div>	
+					<div id="tabs-12"> 		
+					<ul class="small_sort" >
+					<c:forEach var="nutrients" items="${nutrients}">						
+						<c:if test="${nutrients.foodgroup.equals('해조류')}">
+							<li>
+							<a  href="javascript:;" ingre_num="${nutrients.nutrient_num}">
+								<em></em>								
+								<strong>${nutrients.food}</strong>
+							</a> 
+							</li>
+						</c:if>
+					</c:forEach>						
+					</ul>
+					</div>	
+					<div id="tabs-13"> 		
+					<ul class="small_sort" >
+					<c:forEach var="nutrients" items="${nutrients}">						
+						<c:if test="${nutrients.foodgroup.equals('우유및유제품류')}">
+							<li>
+							<a  href="javascript:;" ingre_num="${nutrients.nutrient_num}">
+								<em></em>								
+								<strong>${nutrients.food}</strong>
+							</a> 
+							</li>
+						</c:if>
+					</c:forEach>						
+					</ul>
+					</div>					
+				</fieldset>
+				
+				<fieldset class="field2">
+					<dl>
+						<dt>내가 선택한 재료</dt>
+						<dd>
+							<ul class="selected-ingre">
+								<li class="no-content">재료를 선택해주세요.</li>
+							</ul>
+							<div class="btn">
+								<button type="submit">이 재료로 추천받기</button>
+							</div>
+						</dd>
+					</dl>
+				</fieldset>
+			</form>
+		</div>
+	</section>
 
     <section class="ftco-section">
         <div class="container">
@@ -259,78 +458,78 @@ document.location.href = url;   --%>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3 text-center d-flex align-self-stretch ftco-animate">
-                    <div class="media block-6 services mb-md-0 mb-4">
-                        <div class="icon bg-color-4 d-flex justify-content-center align-items-center mb-2">
-                            <span class="flaticon-customer-service"></span>
-                        </div>
-                        <div class="media-body">
-                            <h3 class="heading"><spring:message code="chef_cir4" /></h3>
-                            <span><spring:message code="chef_cir4_stxt" /></span>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </section>
-<!-- <section class="ftco-section ftco-category ftco-no-pt">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-3">
-                
-                </div>
-                 <div class="col-md-3">
-                
-                </div>
-                 <div class="col-md-3">
-                
-                </div>
-                 <div class="col-md-3">
-                
-                </div>
-                </div>
-                </div>
-                </section> -->
+
     <section class="ftco-section ftco-category ftco-no-pt">
         <div class="container">
             <div class="row">
+            	<c:forEach var="top4" items="${top4}" varStatus="status">
+            		<c:if test="${status.index==0}">
+            			<c:set var="rcpnum1" value="${top4.rcpnum}" />
+            			<c:set var="foodname1" value="${top4.foodname}" />
+            			<c:set var="thumbnail1" value="${top4.thumbnail}" />
+            		</c:if>
+            		<c:if test="${status.index==1}">
+            			<c:set var="rcpnum2" value="${top4.rcpnum}" />
+            			<c:set var="foodname2" value="${top4.foodname}" />
+            			<c:set var="thumbnail2" value="${top4.thumbnail}" />
+            		</c:if>
+            		<c:if test="${status.index==2}">
+            			<c:set var="rcpnum3" value="${top4.rcpnum}" />
+            			<c:set var="foodname3" value="${top4.foodname}" />
+            			<c:set var="thumbnail3" value="${top4.thumbnail}" />
+            		</c:if>
+            		<c:if test="${status.index==3}">
+            			<c:set var="rcpnum4" value="${top4.rcpnum}" />
+            			<c:set var="foodname4" value="${top4.foodname}" />
+            			<c:set var="thumbnail4" value="${top4.thumbnail}" />
+            		</c:if>
+            	</c:forEach>
                 <div class="col-md-8">
                     <div class="row">
                         <div class="col-md-6 order-md-last align-items-stretch d-flex">
                             <div class="category-wrap-2 ftco-animate img align-self-stretch d-flex" style="background-image: url(images/category.jpg);">
                                 <div class="text text-center">
-                                    <h2>한 그릇의 품격</h2>
-                                    <p>먹어는 봤나~</p>
-                                    <p><a href="#" class="btn btn-primary">view +</a></p>
-                                </div>
+                                    <h2>레시피 TOP4</h2>                                 
+                                </div>                   
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="category-wrap ftco-animate img mb-4 d-flex align-items-end" style="background-image: url(images/category-1.jpg);">
+                        	<a href="<%=request.getContextPath()%>/rcp/content?rcpnum=${rcpnum1}">
+                            <div class="category-wrap ftco-animate img mb-4 d-flex align-items-end" style="background-image: url(<%=request.getContextPath()%>/uploadRcpFile/${thumbnail1});">
+                            	<div class="text px-3 py-1">
+                                    <h2 class="mb-0" style="color:white">${foodname1}</h2>
+                                </div> 
+                            </div>
+                            </a>
+                            <a href="<%=request.getContextPath()%>/rcp/content?rcpnum=${rcpnum2}">
+                            <div class="category-wrap ftco-animate img d-flex align-items-end" style="background-image: url(<%=request.getContextPath()%>/uploadRcpFile/${thumbnail2});">
                                 <div class="text px-3 py-1">
-                                    <h2 class="mb-0"><a href="#">Fruits</a></h2>
+                                    <h2 class="mb-0" style="color:white">${foodname2}</h2>
                                 </div>
                             </div>
-                            <div class="category-wrap ftco-animate img d-flex align-items-end" style="background-image: url(images/category-2.jpg);">
-                                <div class="text px-3 py-1">
-                                    <h2 class="mb-0"><a href="#">Vegetables</a></h2>
-                                </div>
-                            </div>
+                            </a>
                         </div>
                     </div>
                 </div>
 
                 <div class="col-md-4">
-                    <div class="category-wrap ftco-animate img mb-4 d-flex align-items-end" style="background-image: url(images/category-3.jpg);">
+                	<a href="<%=request.getContextPath()%>/rcp/content?rcpnum=${rcpnum3}">
+                    <div class="category-wrap ftco-animate img mb-4 d-flex align-items-end" style="background-image: url(<%=request.getContextPath()%>/uploadRcpFile/${thumbnail3});">
                         <div class="text px-3 py-1">
-                            <h2 class="mb-0"><a href="#">Juices</a></h2>
+                            <h2 class="mb-0" style="color:white">${foodname3}</h2>
                         </div>
                     </div>
-                    <div class="category-wrap ftco-animate img d-flex align-items-end" style="background-image: url(images/category-4.jpg);">
+                    </a>
+                    <a href="<%=request.getContextPath()%>/rcp/content?rcpnum=${rcpnum4}">
+                    <div class="category-wrap ftco-animate img d-flex align-items-end" style="background-image: url(<%=request.getContextPath()%>/uploadRcpFile/${thumbnail4});">
                         <div class="text px-3 py-1">
-                            <h2 class="mb-0"><a href="#">Dried</a></h2>
+                            <h2 class="mb-0" style="color:white">${foodname4}</h2>
                         </div>
                     </div>
+                    </a>
                 </div>
             </div>
         </div>
@@ -772,7 +971,7 @@ document.location.href = url;   --%>
                             <div class="col-md-3 d-flex justify-content-center counter-wrap ftco-animate">
                                 <div class="block-18 text-center">
                                     <div class="text">
-                                        <strong class="number" data-number="25486">0</strong>
+                                        <strong class="number" data-number="${memberCnt}">0</strong>
                                         <span>총 쉐프수</span>
                                     </div>
                                 </div>
@@ -780,7 +979,7 @@ document.location.href = url;   --%>
                             <div class="col-md-3 d-flex justify-content-center counter-wrap ftco-animate">
                                 <div class="block-18 text-center">
                                     <div class="text">
-                                        <strong class="number" data-number="124086">0</strong>
+                                        <strong class="number" data-number="${rcpCnt}">0</strong>
                                         <span>총 레시피수</span>
                                     </div>
                                 </div>
@@ -788,15 +987,7 @@ document.location.href = url;   --%>
                             <div class="col-md-3 d-flex justify-content-center counter-wrap ftco-animate">
                                 <div class="block-18 text-center">
                                     <div class="text">
-                                        <strong class="number" data-number="54291">0</strong>
-                                        <span>월 방문자수</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-3 d-flex justify-content-center counter-wrap ftco-animate">
-                                <div class="block-18 text-center">
-                                    <div class="text">
-                                        <strong class="number" data-number="486408">0</strong>
+                                        <strong class="number" data-number="${rcpReadCnt}">0</strong>
                                         <span>총 레시피 조회수</span>
                                     </div>
                                 </div>

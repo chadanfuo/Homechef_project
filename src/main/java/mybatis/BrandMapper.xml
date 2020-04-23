@@ -19,13 +19,56 @@
 		from brand
 	</select>
 	
+	<select id="memList" resultType="Member">
+	<![CDATA[
+		select rank,memNum,name,profile,readcnt,rcpcnt,followcnt,likecnt
+		from(
+		select ROW_NUMBER() OVER (ORDER BY readcnt DESC) as rank,memNum,name,profile,readcnt,rcpcnt,followcnt,likecnt
+		from (select m.memNum,name,profile,
+             		 nvl(a,0) readcnt,nvl(b,0) rcpcnt,nvl(c,0) followcnt,nvl(d,0) likecnt
+		      from member m,
+		          (select memnum, sum(readcount) as a
+		           from rcp
+		           group by memnum) r1,
+		          (select memnum, count(*) as b
+		           from rcp
+		           group by memnum)r2,
+		          (select follownum, count(*) as c
+		           from follow
+		           group by follownum) f,
+		          (select memnum, count(*) as d
+		           from likes
+		           group by memnum) l
+		      where m.memnum=r1.memnum(+) and m.memnum=r2.memnum(+) and m.memnum=f.follownum(+) and m.memnum=l.memnum(+)))
+		 where rank<4
+	]]>
+	</select>
 	     
-<select id="findMember" parameterType="String" resultType="Member">
-       select *from member where name like '%'||#{keyword}||'%' 
-		
-</select>
-<select id="selectName" parameterType="String" resultType="Member">
-       select *from member where name = #{name}
-		
-</select>
+	<select id="memSearch" parameterType="String" resultType="Member">
+		select rank,memNum,name,profile,readcnt,rcpcnt,followcnt,likecnt
+		from(
+		select ROW_NUMBER() OVER (ORDER BY readcnt DESC) as rank,memNum,name,profile,readcnt,rcpcnt,followcnt,likecnt
+		from (select m.memNum,name,profile,
+             		 nvl(a,0) readcnt,nvl(b,0) rcpcnt,nvl(c,0) followcnt,nvl(d,0) likecnt
+		      from member m,
+		          (select memnum, sum(readcount) as a
+		           from rcp
+		           group by memnum) r1,
+		          (select memnum, count(*) as b
+		           from rcp
+		           group by memnum)r2,
+		          (select follownum, count(*) as c
+		           from follow
+		           group by follownum) f,
+		          (select memnum, count(*) as d
+		           from likes
+		           group by memnum) l
+		      where m.memnum=r1.memnum(+) and m.memnum=r2.memnum(+) and m.memnum=f.follownum(+) and m.memnum=l.memnum(+)))
+		where upper(name) like '%'||upper(#{keyword})||'%'	
+	</select>
+	
+	<select id="selectName" parameterType="String" resultType="Member">
+	       select *from member where name = #{name}			
+	</select>
+	
 </mapper>	

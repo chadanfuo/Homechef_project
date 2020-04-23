@@ -121,13 +121,14 @@ height: 200px;
 				<div class="col-lg-12 d-block">
 					<div class="row d-flex">
 						<div class="col-md pr-4 d-flex topper align-items-center">
-							<form action="#" class="search-form">
-								<div class="form-group">
-									<span class="icon ion-ios-search"></span> <input type="text"
-										class="form-control"
-										placeholder="<spring:message code="commonsearch" />  ">
-								</div>
-							</form>
+							<form action="<%=request.getContextPath()%>/rcp/list" class="search-form">
+                                <div class="form-group">
+                                    <span class="icon ion-ios-search"></span>
+                                    <input type="hidden" name="sorting" value="latest">
+                                    <input type="hidden" name="cateNum" value="0">
+                                    <input type="text" class="form-control" name="keyword" placeholder="레시피를 검색해주세요." autocomplete="off">
+                                </div>
+                            </form>
 						</div>
 						<!-- <div class="col-md pr-4 d-flex topper align-items-center">
                             <div class="icon mr-2 d-flex justify-content-center align-items-center"><span class="icon-paper-plane"></span></div>

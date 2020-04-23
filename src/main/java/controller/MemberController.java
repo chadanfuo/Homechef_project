@@ -45,17 +45,19 @@ public class MemberController {
 
 	@ModelAttribute
 	public void initProcess(Model m){
-		List<Rcp> foodnames =dbPro2.rcpAllList();
-		List<Ingredient> ingredients =dbPro2.getIngredient();
+		List<Rcp> rcpList =dbPro2.rcpAllList();
 		
 		HashSet<String> keywords = new HashSet<String>();
-		for(int i=0;i<foodnames.size();i++){
-			Rcp foodname=foodnames.get(i);
-			keywords.add(foodname.getFoodname());
-		}
-		for(int i=0;i<ingredients.size();i++){
-			Ingredient ingredient=ingredients.get(i);
-			keywords.add(ingredient.getIngredient());
+		
+		for(int i=0;i<rcpList.size();i++){			
+			Rcp rcp=rcpList.get(i);
+			keywords.add(rcp.getFoodname());
+			
+			String[] tags = null;			
+			tags = rcp.getHashtag().split("/");
+			for (int j = 1; j < tags.length; j++) {
+				keywords.add(tags[j]);
+			}
 		}
 		
 		m.addAttribute("keywords", keywords);
@@ -179,11 +181,14 @@ public class MemberController {
 		int checkFollow = dbPro.checkFollow(loginNum, memNum);
 		int followCount = dbPro.followCount(memNum);
 		int followerCount = dbPro.followerCount(memNum);
+		List<Follow> followerCount2 = dbPro.followerCount2(memNum);
 		List<Member> followList = dbPro.followList(memNum);		
 		int rcpCount = dbPro.rcpCount(memNum);
 		List<Rcp> rcpList=dbPro.rcpList(memNum);
 		int scrapCount=dbPro.scrapCount(memNum);
 		List<Rcp> scarpList=dbPro.scarpList(memNum);
+		List<Rcp> followRcpCount=dbPro.followRcpCount(memNum);
+		List<Rcp> followRcp=dbPro.followRcp(memNum);
 
 		m.addAttribute("loginNum", loginNum);
 
@@ -196,7 +201,10 @@ public class MemberController {
 		m.addAttribute("rcpList", rcpList);
 		m.addAttribute("scrapCount", scrapCount);
 		m.addAttribute("scarpList", scarpList);
-
+		m.addAttribute("followerCount2", followerCount2);
+		m.addAttribute("followRcpCount", followRcpCount);
+		m.addAttribute("followRcp", followRcp);
+		
 		return "mypage/mypage";
 	}
 
