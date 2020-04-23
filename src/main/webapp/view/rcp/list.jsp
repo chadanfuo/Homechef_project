@@ -264,6 +264,21 @@ a {
     color: #fff;
 }
 .selected { background:red }
+.lst_recipe .option {
+    width: 263px;
+    position: absolute;
+    bottom: 0;
+    height: 27px;
+    border-top: 1px solid #e1e1e1;
+    text-align: center;
+}
+.lst_recipe .option>div {
+	border: none;
+    width: 130px;
+    height: 100%;
+    float: left;
+    border-left: 1px solid #ddd;
+}
 </style>
 
 <c:if test='${keyword.equals("") }'>
@@ -386,12 +401,21 @@ a {
 					<br><strong>${rcpAllList.title}</strong><p>${rcpAllList.foodname}</p>
 				</a>
 			</p>
+			
+			<div class="option">
+				<div class="time">
+				<i class="far fa-clock"></i>&nbsp;&nbsp;${rcpAllList.cookingtime}분
+				</div>
+				<div class="like">
+				<i class="fas fa-heart"></i>&nbsp;&nbsp;${rcpAllList.likecnt}명
+				</div>
+			</div>
 			<!-- 좋아요 버튼 -->
-			<div class="btn_area">
+			<%-- <div class="btn_area">
 				<span style="font-size:13px; color: red;">
 					<i class="fas fa-heart"></i></span>
-						<%-- <c:forEach var="likes" items="${likes.likecnt}"></c:forEach> --%>
-			</div>
+						<c:forEach var="likes" items="${likes.likecnt}"></c:forEach>
+			</div> --%>
 		</li>
 		</c:forEach>
 	</ul>	

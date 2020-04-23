@@ -97,7 +97,6 @@ ol, ul {
 .lst_step img {
   	display: block;
     width: 600px;
-    height: 340px;
     margin: 0 auto 13px;
 }
 .lst_step p {
