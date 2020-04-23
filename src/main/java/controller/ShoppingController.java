@@ -1,13 +1,17 @@
 package controller;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -228,76 +232,93 @@ public class ShoppingController {
 		
 		return "shopping/orderForm";
 	}
-   
-   private String address_split(String value, int index){
-		String str = value;
-		String[] array = str.split(",");
-		return array[index];
-	}
-	
-	@RequestMapping(value = "complete_order", method=RequestMethod.POST) 
-	public String order(@RequestParam("select")int select, @RequestParam(value="sel_address", required=false, defaultValue="-1")int sel_address, @RequestParam(value="addradd", required=false, defaultValue="0")int addradd,
-			int[] nums, MemAddress memaddr, OrderInfo orderinfo, OrderProduct ordpro, Model m){
-		// TODO Auto-generated method stub
-		MemAddress getmemA = new MemAddress();
-		System.out.println("select : " + select);
-		System.out.println("address : " + sel_address);
-		System.out.println("address : " + memaddr.getAddress());
-		System.out.println("addr_add : "+addradd);
-		String addr = "";
-		if(select==0){
-			String[] array = memaddr.getAddress().split(",");
-			for(int i = 0; i < 2 ; i++){
-				addr+=array[i]+" ";
+
+	@RequestMapping(value = "complete", method=RequestMethod.POST)
+	@ResponseBody
+	public void order(@RequestBody String orderInfo) throws Exception{
+		
+		//serialize를 가져와 디코딩후  hashmap 저장
+		List<Integer> nums = new ArrayList<>();
+		String info = URLDecoder.decode(orderInfo, "UTF-8");
+		HashMap<String, String> order_info = new HashMap<>();
+		String address = "";
+		for(String str : orderinfo_split(info)){
+			String[] array = str.split("=");
+			if(array.length == 1) continue;
+			for(String str2 : array){
+				//System.out.println("- "+ str2 );
 			}
-			memaddr.setAddress(addr);
-			memaddr.setRecipient(address_split(memaddr.getRecipient(),select));
-			memaddr.setZipcode(address_split(memaddr.getZipcode(),select));
-			orderinfo.setAddress(addr);
-			orderinfo.setRecipient(address_split(memaddr.getRecipient(),select));
-			orderinfo.setZipcode(address_split(memaddr.getZipcode(),select));
+			switch(array[0]){
+				case "address": address+=array[1]+" "; continue;
+				case "nums": nums.add(Integer.parseInt(array[1])); continue;
+			}
+			order_info.put(array[0], array[1]);
+		}
+		order_info.put("adress", address);
+		/*Set<String> keySet = order_info.keySet();
+		Iterator<String> keyIterator = keySet.iterator();
+		while(keyIterator.hasNext()){
+			String key = keyIterator.next();
+			String value = order_info.get(key);
+			System.out.println(key+" : "+order_info.get(key));
+		}*/
+		
+		
+		//데이터 저장
+		OrderInfo orderinfo = new OrderInfo();
+		MemAddress memaddr = new MemAddress();
+		int select = Integer.parseInt(order_info.get("select"));
+		orderinfo.setMemo(order_info.get("memo"));
+		orderinfo.setHowtopay(order_info.get("howtopay"));
+		orderinfo.setMemNum(Integer.parseInt(order_info.get("memNum")));
+		orderinfo.setAmount(Integer.parseInt(order_info.get("amount")));
+		orderinfo.setMemName(order_info.get("memName"));
+		
+		if(select==0){
+			System.out.println("셀렉 0");
 			
-			if(addradd==1){
+			orderinfo.setAddress(address);
+			orderinfo.setRecipient(order_info.get("recipient"));
+			orderinfo.setZipcode(order_info.get("zipcode"));
+			
+			if(order_info.get("addradd")!=null && order_info.get("addradd").equals("1")){
+				memaddr.setMemNum(Integer.parseInt(order_info.get("memNum")));
+				memaddr.setMemName(order_info.get("memName"));
+				memaddr.setAddress(address);
+				memaddr.setRecipient(order_info.get("recipient"));
+				memaddr.setZipcode(order_info.get("zipcode"));
+				System.out.println("select0  "+memaddr);
 				service.insertMemAddr(memaddr);
 			}
 		}else{
 			// 기존 배송지 일경우, 주문완료된 카트들 삭제..
-			getmemA = service.getAddress1(sel_address);
-			orderinfo.setAddress(getmemA.getAddress());
-			orderinfo.setRecipient(getmemA.getRecipient());
-			orderinfo.setZipcode(getmemA.getZipcode());
+			System.out.println("셀렉 1");
+			
+			memaddr = service.getAddress1(Integer.parseInt(order_info.get("sel_address")));
+			orderinfo.setAddress(memaddr.getAddress());
+			orderinfo.setRecipient(memaddr.getRecipient());
+			orderinfo.setZipcode(memaddr.getZipcode());
+			orderinfo.setMemo(order_info.get("memo2"));
+			System.out.println("select1  "+memaddr);
 
 		}
-		System.out.println(addr);
-		
-		service.insertOrderForm(orderinfo, ordpro, nums);
+		System.out.println(orderinfo);
+		service.insertOrderForm(orderinfo, nums);
 		
 		
 		System.out.println(memaddr);
 		System.out.println(orderinfo);
-		System.out.println(ordpro);
+			
 		
-		
-		return "shopping/orderSuccess";
 	}
 	
-	@RequestMapping(value = "complete", method=RequestMethod.POST)
-	public @ResponseBody void pa(@RequestBody String select){
-		System.out.println("complete!");
-		//System.out.println(test);
-		
-		
-		
-		System.out.println(select);
-		
-		//System.out.println(memaddr);
-		//System.out.println(orderinfo);
-		//System.out.println(ordpro);
-		
-		
-		
-
+	private String[] orderinfo_split(String value){
+		String str = value;
+		String[] array = str.split("&");
+		return array;
 	}
+	
+	
 	@RequestMapping(value = "complete2")
 	public String orderSuccess(){
 		System.out.println("complete!2");
@@ -305,13 +326,7 @@ public class ShoppingController {
 
 	}
 	
-	@RequestMapping("pay") // 맨끝단의 url만 가지고 옴, get방식으로 한다.
-	public String paying(@ModelAttribute("name")String name, @ModelAttribute("email")String email, @ModelAttribute("phone")String phone, @ModelAttribute("address")String address, @ModelAttribute("price")int price) {
-	      // TODO Auto-generated method stub
-			System.out.println(name+", "+email+", "+phone+", "+address+", "+price);
-	      return "shopping/pay";
-	      
-	}
+
 	
 	@RequestMapping(value = "orderinfo")
 	   public String orderinfo(HttpSession session, Model m) throws Exception {

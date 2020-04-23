@@ -165,7 +165,19 @@ public class MybatisRcpDao {
 
 		return division;
 	}
+	public Division getDivision4(int cateNum) {
+		SqlSession sqlSession = opendb.getSqlSessionFactory().openSession();
+		Division division = null;
 
+		try {
+			String statement = namespace + ".getDivision3";
+			division = sqlSession.selectOne(statement, cateNum);
+		} finally {
+			sqlSession.close();
+		}
+
+		return division;
+	}
 	public List<Rcp> rcpAllList() {
 		SqlSession sqlSession = opendb.getSqlSessionFactory().openSession();
 		List<Rcp> rcpAllList = null;
