@@ -131,7 +131,7 @@
 	<select id="rcpContent2" parameterType="int" resultType="RcpContent">
 		select *
 		from RcpContent
-		where rcpNum=#{rcpnum}
+		where rcpNum=#{rcpnum} order by step
 	</select>
 	
 	<select id="rcpContent3" parameterType="int" resultType="Ingredient"> <!-- *로 모든 데이터를 다 받아옴 -->
@@ -245,4 +245,28 @@
 	<select id="likeCount" resultType="Likes">
 		select nvl(count(*), 0) from likes group by rcpnum
 	</select>
+	
+	<insert id="insertComment" parameterType="Comments">
+		insert into comments
+		values (#{commentnum}, #{rcpnum}, #{memnum}, #{content}, sysdate)
+	</insert>
+	
+	<select id="commentnum_max" resultType="int">
+		select nvl(max(commentnum)+1, 1)
+		from comments
+	</select>
+	
+	<select id="readComment" parameterType="int" resultType="Comments">
+		select * from member m, comments c where m.memNum = c.memnum and c.rcpnum=#{rcpnum} order by reg_date desc
+	</select>
+	
+	<delete id="deleteComment" parameterType="int">
+		delete from comments where commentnum= #{commentnum}
+	</delete>
+	
+	<!-- <update id="updateComment" parameterType="hashmap">
+		update comments set content = #{content}                 
+		where rcpnum = #{rcpnum}
+	</update> -->
+		
 </mapper>

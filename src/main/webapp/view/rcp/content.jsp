@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>    
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -9,6 +11,15 @@
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css">
 </head>
 <style>
+.commentButton {
+display: inline-block;
+ color: #6d6e71;
+    font-size: 13px;
+    font-family: Microsoft YaHei, "NS";
+    margin-top: 5px;
+    line-height: 1.5;
+}
+
 .box_write {
     background-color: #f7f7f7;
     width: 660px;
@@ -244,21 +255,47 @@ ol, ul {
                                                     
                                                     <section class="sec_comment">
 														<h2>한줄댓글</h2>
-														<form class="box_write">
+														<form class="box_write" action="<%=request.getContextPath()%>/rcp/insertComment" method="POST">
 															<textarea placeholder="한 줄 댓글을 남겨주세요." name="comment"></textarea>
+															<input type="hidden" name="rcpnum" value="${rcpContent.rcpnum}">
 															<button type="submit">댓글남기기</button>
 														</form>
 														
+														
+														
 														<ul class="lst_comment">
+															<c:forEach var="commentList" items="${commentList}" varStatus="status">
 															<li>
+																<%-- <c:if test="${loginNum!=rcpContent.memnum}"> --%>
 																<div class="img-cover">
-																	<img src="<%=request.getContextPath()%>/uploadFile/profile.png">
+																	<img src="<%=request.getContextPath()%>/uploadFile/${commentList.profile}">
 																</div>
-																<strong>Test</strong>
-																<time>2015.02.02</time>
-																<p>Good</p>
+																<strong>${commentList.name}</strong>
+																<time><fmt:formatDate value="${commentList.reg_date}" pattern="yyyy-MM-dd HH:mm:ss"/></time>
+																<p>${commentList.content}</p>
+																<%-- </c:if> --%>
+																
+															<%-- <!-- 댓글수정 -->
+															<c:if test="${loginNum == commentList.memnum}">
+															<form class="commentButton" action="<%=request.getContextPath()%>/rcp/updateComment" method="POST">
+																<textarea name="comment" style="resize: none;">${commentList.content}</textarea>
+																<input type="hidden" name="rcpnum" value="${rcpContent.rcpnum}">
+																<button type="submit">수정</button>
+															</form>
+															</c:if> --%>
+															
+															<!-- 댓글삭제 -->
+															<c:if test="${loginNum == commentList.memnum}">
+															<form class="commentButton" action="<%=request.getContextPath()%>/rcp/deleteComment" method="POST">
+																<input type="hidden" name="rcpnum" value="${rcpContent.rcpnum}">
+																<input type="hidden" name="commentnum" value="${commentList.commentnum}">
+																<button type="submit">삭제</button>
+															</form>
+															</c:if>
 															</li>
+															</c:forEach>
 														</ul>
+
 													</section>
                                                 </div>
                                                 <section class="sec_info">

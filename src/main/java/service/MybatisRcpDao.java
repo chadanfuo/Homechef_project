@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import model.Category;
+import model.Comments;
 import model.Division;
 import model.Ingredient;
 import model.Likes;
@@ -165,7 +166,7 @@ public class MybatisRcpDao {
 
 		return division;
 	}
-	
+
 	public List<Ingredient> getIngredient() {
 		SqlSession sqlSession = opendb.getSqlSessionFactory().openSession();
 		List<Ingredient> ingredients = null;
@@ -348,36 +349,36 @@ public class MybatisRcpDao {
 
 		return count;
 	}
-	
-	public int searchCount(String keyword){
-		SqlSession sqlSession=opendb.getSqlSessionFactory().openSession();
+
+	public int searchCount(String keyword) {
+		SqlSession sqlSession = opendb.getSqlSessionFactory().openSession();
 		int count;
-		
-		try{
-			String statement=namespace+".searchCount"; 
-			count=sqlSession.selectOne(statement, keyword);
-		}finally{
+
+		try {
+			String statement = namespace + ".searchCount";
+			count = sqlSession.selectOne(statement, keyword);
+		} finally {
 			sqlSession.close();
 		}
 
 		return count;
 	}
-	
-	public List<Rcp> searchList(String keyword){
-		SqlSession sqlSession=opendb.getSqlSessionFactory().openSession();
-		List<Rcp> searchList=null;
+
+	public List<Rcp> searchList(String keyword) {
+		SqlSession sqlSession = opendb.getSqlSessionFactory().openSession();
+		List<Rcp> searchList = null;
 		String statement;
-		
-		try{
-			statement=namespace+".searchList";         
-			searchList=sqlSession.selectList(statement, keyword);
-		}finally{
+
+		try {
+			statement = namespace + ".searchList";
+			searchList = sqlSession.selectList(statement, keyword);
+		} finally {
 			sqlSession.close();
 		}
-		
+
 		return searchList;
 	}
-	
+
 	public List<Rcp> readCountList() {
 		SqlSession sqlSession = opendb.getSqlSessionFactory().openSession();
 		List<Rcp> rcpAllList = null;
@@ -392,7 +393,7 @@ public class MybatisRcpDao {
 
 		return rcpAllList;
 	}
-	
+
 	public List<Rcp> readCountList2(int cateNum) {
 		SqlSession sqlSession = opendb.getSqlSessionFactory().openSession();
 		List<Rcp> rcpAllList = null;
@@ -407,7 +408,7 @@ public class MybatisRcpDao {
 
 		return rcpAllList;
 	}
-	
+
 	public List<Rcp> readCountList3(int cateNum) {
 		SqlSession sqlSession = opendb.getSqlSessionFactory().openSession();
 		List<Rcp> rcpAllList = null;
@@ -436,43 +437,43 @@ public class MybatisRcpDao {
 
 		return nutrient;
 	}
-	
+
 	public List<Nutrient> rcpNutrient(int rcpnum) {
 		SqlSession sqlSession = opendb.getSqlSessionFactory().openSession();
 		List<Nutrient> rcpNutrient = null;
 		String statement;
-		
+
 		try {
 			statement = namespace + ".rcpNutrient";
 			rcpNutrient = sqlSession.selectList(statement, rcpnum);
 		} finally {
 			sqlSession.close();
 		}
-		
+
 		return rcpNutrient;
 	}
-	
+
 	public int checkLike(int loginNum, int rcpnum) {
 		SqlSession sqlSession = opendb.getSqlSessionFactory().openSession();
 		int checkLike = -1;
-		
+
 		Map map = new HashMap();
 		map.put("memnum", loginNum); // 나
-		map.put("mypick", rcpnum); //내가 좋아요 누른 글
+		map.put("mypick", rcpnum); // 내가 좋아요 누른 글
 		try {
-		String statement = namespace + ".checkLike";
-		checkLike = sqlSession.selectOne(statement, map);
-		
+			String statement = namespace + ".checkLike";
+			checkLike = sqlSession.selectOne(statement, map);
+
 		} finally {
-				sqlSession.close();
-			}
-		return checkLike; //1이냐 0이냐에 따라 좋아요 눌렀는 지 안눌렀는 지 확인가능
+			sqlSession.close();
+		}
+		return checkLike; // 1이냐 0이냐에 따라 좋아요 눌렀는 지 안눌렀는 지 확인가능
 	}
-	
+
 	public void addLike(Likes likes) {
 		SqlSession sqlSession = opendb.getSqlSessionFactory().openSession();
-		
-		try {		
+
+		try {
 			String statement = namespace + ".addLike";
 
 			sqlSession.insert(statement, likes);
@@ -486,7 +487,7 @@ public class MybatisRcpDao {
 		SqlSession sqlSession = opendb.getSqlSessionFactory().openSession();
 		try {
 			String statement = namespace + ".cancelLike";
-			
+
 			sqlSession.delete(statement, likes);
 			sqlSession.commit();
 		} finally {
@@ -494,7 +495,6 @@ public class MybatisRcpDao {
 		}
 	}
 
-	
 	public List<Integer> likeCount() {
 		SqlSession sqlSession = opendb.getSqlSessionFactory().openSession();
 		List<Integer> count = null;
@@ -507,5 +507,63 @@ public class MybatisRcpDao {
 		}
 		return count;
 	}
-	
+
+	public void insertComment(Comments comments) {
+		SqlSession sqlSession = opendb.getSqlSessionFactory().openSession();
+		
+		int commentnum;
+		try {
+			String statement = namespace + ".commentnum_max";
+			commentnum = sqlSession.selectOne(statement);
+			comments.setCommentnum(commentnum);
+
+			String statement2 = namespace + ".insertComment";
+			sqlSession.insert(statement2, comments);
+			sqlSession.commit();
+			
+		} finally {
+			sqlSession.close();
+		}
+
+	}
+
+	public List<Comments> readComment(int rcpnum) {
+		SqlSession sqlSession = opendb.getSqlSessionFactory().openSession();
+		List<Comments> commentList = null;
+		
+		try {
+			String statement = namespace + ".readComment";
+			commentList = sqlSession.selectList(statement, rcpnum);
+		} finally {
+			sqlSession.close();
+		}
+		return commentList;
+	}
+
+	/*public void updateComment(int rcpnum, String content) {
+		SqlSession sqlSession = opendb.getSqlSessionFactory().openSession();
+		HashMap map = new HashMap();
+		map.put(rcpnum, rcpnum);
+		map.put(content, content);
+		
+		try {
+			String statement = namespace + ".updateComment";
+			sqlSession.update(statement, rcpnum);
+			sqlSession.commit();
+		} finally {
+			sqlSession.close();
+		}	
+	}*/
+
+	public void deleteComment(int commentnum) {
+		SqlSession sqlSession = opendb.getSqlSessionFactory().openSession();
+		try {
+			String statement = namespace + ".deleteComment";
+			sqlSession.delete(statement, commentnum);
+			sqlSession.commit();
+		} finally {
+			sqlSession.close();
+		}
+		
+	}
 }
