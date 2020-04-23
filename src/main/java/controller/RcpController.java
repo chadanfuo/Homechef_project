@@ -19,9 +19,11 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import model.Category;
+import model.Comments;
 import model.Division;
 import model.Ingredient;
 import model.Likes;
+import model.Member;
 import model.Nutrient;
 import model.Rcp;
 import model.RcpContent;
@@ -135,10 +137,11 @@ public class RcpController {
 			loginNum = (int) session.getAttribute("memNum");
 		}
 		
-		Rcp rcpContent=dbPro.rcpContent(rcpnum);
-		List<RcpContent> rcpContent2=dbPro.rcpContent2(rcpnum);
-		List<Ingredient> rcpContent3=dbPro.rcpContent3(rcpnum);
-		List<Nutrient> nutrient=dbPro.rcpNutrient(rcpnum);
+		Rcp rcpContent = dbPro.rcpContent(rcpnum);
+		List<RcpContent> rcpContent2 = dbPro.rcpContent2(rcpnum);
+		List<Ingredient> rcpContent3 = dbPro.rcpContent3(rcpnum);
+		List<Nutrient> nutrient = dbPro.rcpNutrient(rcpnum);
+		List<Comments> commentList = dbPro.readComment(rcpnum);
 		
 		int checkScrap = dbPro.checkScrap(loginNum, rcpnum);
 		int scrapCount = dbPro.scrapCount(rcpnum);
@@ -155,8 +158,11 @@ public class RcpController {
 		m.addAttribute("loginNum", loginNum);
 		m.addAttribute("nutrient", nutrient);
 		m.addAttribute("checkLike", checkLike);
+
 		m.addAttribute("tags", tags);
 		
+
+		m.addAttribute("commentList", commentList);
 		return "rcp/content";
 	}
 
@@ -319,5 +325,78 @@ public class RcpController {
 		m.addAttribute("recNutrients", recNutrients);
 		
 		return "rcp/recommendList";
+		
+	}
+	
+	@RequestMapping(value = "insertComment", method = RequestMethod.POST)
+	public String rcp_insertComment(HttpServletRequest request, int rcpnum, String comment) throws Exception {
+		HttpSession session = request.getSession();
+		
+		Comments comments = new Comments();
+		int loginNum = 0;
+
+		if (session.getAttribute("memNum") == null) {
+			session.setAttribute("memNum", 0);
+			loginNum = (int) session.getAttribute("memNum");
+		} else {
+			loginNum = (int) session.getAttribute("memNum");
+		}
+		
+		comments.setRcpnum(rcpnum);
+		comments.setMemnum(loginNum);
+		comments.setContent(comment);
+		
+		dbPro.insertComment(comments);
+
+		return "redirect:/rcp/content?rcpnum=" + rcpnum;
+
+	}
+	
+	/*@RequestMapping(value="updateComment", method= RequestMethod.POST)
+	public String rcp_updateComment(HttpServletRequest request, int rcpnum, String comment) throws Exception {
+		HttpSession session = request.getSession();
+		
+		Comments comments = new Comments();
+		
+		int loginNum = 0;
+		
+		if(session.getAttribute("memNum") == null) {
+			session.setAttribute("memNum", 0);
+			loginNum = (int) session.getAttribute("memNum");
+		} else {
+			loginNum = (int) session.getAttribute("memNum");
+		}
+		
+		comments.setRcpnum(rcpnum);
+		comments.setMemnum(loginNum);
+		comments.setContent(comment);
+		
+		dbPro.updateComment(rcpnum, comment);
+		
+		return "redirect:/rcp/contnet?rcpnum=" + rcpnum;
+
+	}*/
+	
+	
+	@RequestMapping(value = "deleteComment", method = RequestMethod.POST)
+	public String rcp_deleteComment(HttpServletRequest request, int rcpnum, int commentnum) throws Exception {
+		HttpSession session = request.getSession();
+		
+		Comments comments = new Comments();
+		int loginNum = 0;
+
+		if (session.getAttribute("memNum") == null) {
+			session.setAttribute("memNum", 0);
+			loginNum = (int) session.getAttribute("memNum");
+		} else {
+			loginNum = (int) session.getAttribute("memNum");
+		}
+	
+		/*comments.setCommentnum(commentnum);*/
+		
+		dbPro.deleteComment(commentnum);
+		
+		return "redirect:/rcp/content?rcpnum=" + rcpnum;
+
 	}
 }

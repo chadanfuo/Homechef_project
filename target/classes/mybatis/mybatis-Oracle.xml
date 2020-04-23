@@ -26,6 +26,8 @@
 		<typeAlias type="model.Scrap" alias="Scrap"/>
 		<typeAlias type="model.Nutrient" alias="Nutrient"/>
 		<typeAlias type="model.Likes" alias="Likes"/>
+		<typeAlias type="model.Comments" alias="Comments"/>
+	
 	</typeAliases>
 	<environments default="development">
 		<environment id="development">
