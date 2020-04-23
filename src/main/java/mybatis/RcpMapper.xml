@@ -133,6 +133,7 @@
 		select *
 		from RcpContent
 		where rcpNum=#{rcpnum}
+		order by step
 	</select>
 	
 	<select id="rcpContent3" parameterType="int" resultType="Ingredient"> <!-- *로 모든 데이터를 다 받아옴 -->

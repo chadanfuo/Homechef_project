@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import model.Brand;
 import model.Cart;
+import model.Follow;
 import model.Jjim;
 import model.Member;
 import model.Rcp;
@@ -192,6 +193,7 @@ public class BrandRepository{
 		}
 		return   memSearch;
 	}
+	
 	 public List<Member> selectName(String name) {
 		 
 			

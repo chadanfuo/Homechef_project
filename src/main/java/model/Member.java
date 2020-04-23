@@ -16,8 +16,17 @@ public class Member implements Serializable{
 	private int readcnt;
 	private int rcpcnt;
 	private int followcnt;
+	private int likecnt;
 	
-    public int getRank() {
+    public int getLikecnt() {
+		return likecnt;
+	}
+
+	public void setLikecnt(int likecnt) {
+		this.likecnt = likecnt;
+	}
+
+	public int getRank() {
 		return rank;
 	}
 

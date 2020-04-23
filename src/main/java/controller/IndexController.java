@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import exception.DuplicateldException;
 import model.Brand;
-import model.Ingredient;
+import model.Follow;
 import model.Member;
 import model.Nutrient;
 import model.Page;
@@ -275,9 +275,9 @@ public class IndexController {
 		
 	}
 	@RequestMapping(value = "/chef")
-	public String cheflist(String keyword, Model model) {
+	public String cheflist(HttpServletRequest request, String keyword, Model model) {		
 		List<Member> memList=service.memList();
-		List<Member> memSearch = service.memSearch(keyword);
+		List<Member> memSearch = service.memSearch(keyword);		
 		  		
 		model.addAttribute("memList", memList);
 		model.addAttribute("memSearch", memSearch);
@@ -285,16 +285,5 @@ public class IndexController {
 		
 		return "/chef/cheflist";
 	}
-
-	@RequestMapping(value = "/searchChef", method = RequestMethod.POST)
-	public String memSearch(String keyword, Model model) {		
-		List<Member> memSearch = service.memSearch(keyword);
-		  
-		model.addAttribute("memSearch", memSearch);
-		model.addAttribute("keyword", keyword);
-		
-		return "/chef/cheflist";
-	}
-
 	
-	}
+}

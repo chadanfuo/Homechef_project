@@ -311,13 +311,13 @@ ol, ul {
                                                             	<c:if test="${checkScrap==0}">
                                                             	<form action="<%=request.getContextPath()%>/member/scrap" method="post">                                                                    
                                                                     <input type="hidden" name="scrapnum" value="${rcpContent.rcpnum}">
-                                                                    <button type="submit" class="btn_scrap"><i class="far fa-bookmark"></i> 스크랩</button>
+                                                                    <button type="submit" class="btn_scrap"><i class="far fa-bookmark"></i> &nbsp;스크랩</button>
                                                                 </form>
                                                             	</c:if>
                                                             	<c:if test="${checkScrap==1}">
                                                             	<form action="<%=request.getContextPath()%>/member/delScrap" method="post">                                                                    
                                                                     <input type="hidden" name="scrapnum" value="${rcpContent.rcpnum}">
-                                                                    <button type="submit" class="btn_scrap"><i class="fas fa-bookmark"></i>스크랩취소</button>
+                                                                    <button type="submit" class="btn_scrap"><i class="fas fa-bookmark"></i> &nbsp;스크랩 취소</button>
                                                                 </form>
                                                             	</c:if>
                                                             	<!-- 좋아요 버튼 영역 추가 -->
@@ -329,7 +329,7 @@ ol, ul {
 																	value="${rcpContent.rcpnum}"><span
 																	style="font-size: 30px; color: red;">
 																	<button type="submit" class="btn_like">
-																		<i class="far fa-heart"></i>좋아요</button>
+																		<i class="far fa-heart"></i> &nbsp;좋아요</button>
 																</span>
 															</form>
 														</div>
@@ -342,7 +342,7 @@ ol, ul {
 																	value="${rcpContent.rcpnum}"><span
 																	style="font-size: 30px;">
 																	<button type="submit" class="btn_like">
-																		<i class="fas fa-heart"></i>좋아요 취소</button>
+																		<i class="fas fa-heart"></i> &nbsp;좋아요 취소</button>
 																</span>
 															</form>
 														</div>

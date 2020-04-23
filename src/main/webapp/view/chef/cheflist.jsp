@@ -9,6 +9,23 @@
 <title>Insert title here</title>
 </head>
 
+<style>
+.unreply{
+    padding: 5px 10px;
+    background: #e6e6e6;
+    color: #000000;
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: .1em;
+    font-weight: 400;
+    border-radius: 4px;
+}
+.unreply:hover{
+	color:white;
+	background-color: red;
+}
+</style>
+
 <body>
 
 
@@ -59,26 +76,26 @@
 									<p>${memSearch.rank}</p>
 								</div>
 
-								<div class="vcard bio">									
+								<a href="<%=request.getContextPath()%>/member/mypage?memNum=${memSearch.memNum}">	
+								<div class="vcard bio">															
 									<img src="<%=request.getContextPath()%>/uploadFile/${memSearch.profile}">								
 								</div>
+								</a>
 								<div class="comment-body">
-									<h3>${memSearch.name}</h3>
-									<span> <a href="#" class="reply">팔로우하기</a>
-									</span>
+									<h3>${memSearch.name}</h3>									
 
 									<div class="meta">
 										<div>
-											<a><span class="icon-eye"></span> ${memSearch.readcnt}</a>
+											<a href="" title="조회수"><span class="icon-eye"></span> ${memSearch.readcnt}</a>
 										</div>
 										<div>
-											<a><span class="icon-person"></span> ${memSearch.followcnt}</a>
+											<a href="" title="팔로워수"><span class="icon-person"></span> ${memSearch.followcnt}</a>
 										</div>
 										<div>
-											<a><span class="icon-chat"></span> ${memSearch.rcpcnt}</a>
+											<a href="" title="레시피수"><span class="icon-chat"></span> ${memSearch.rcpcnt}</a>
 										</div>
 										<div>
-											<a><span class="icon-heartbeat"></span> ${memSearch.readcnt}</a>
+											<a href="" title="좋아요수"><span class="icon-heartbeat"></span> ${memSearch.likecnt}</a>
 										</div>
 									</div>
 								</div>
@@ -88,34 +105,35 @@
 				</c:if>
 
 				<div class="pt-5 mt-5">
-					<h4 class="mb-5">인기 쉐프 순위</h4>
+					<h4 class="mb-5">인기 쉐프 순위(Top3)</h4>
 					<ul class="comment-list">
 						<c:forEach var="memList" items="${memList}">
 							<li class="comment">
 								<div class="list_ranking">
 									<p>${memList.rank}</p>
 								</div>
-
-								<div class="vcard bio">									
-									<img src="<%=request.getContextPath()%>/uploadFile/${memList.profile}">								
+								
+								<a href="<%=request.getContextPath()%>/member/mypage?memNum=${memList.memNum}">
+								<div class="vcard bio">																
+									<img src="<%=request.getContextPath()%>/uploadFile/${memList.profile}">																	
 								</div>
+								</a>
+								
 								<div class="comment-body">
-									<h3>${memList.name}</h3>
-									<span> <a href="#" class="reply">팔로우하기</a>
-									</span>
+									<h3>${memList.name}</h3>									
 
 									<div class="meta">
 										<div>
-											<a><span class="icon-eye"></span> ${memList.readcnt}</a>
+											<a href="" title="조회수"><span class="icon-eye"></span> ${memList.readcnt}</a>
 										</div>
 										<div>
-											<a><span class="icon-person"></span> ${memList.followcnt}</a>
+											<a href="" title="팔로워수"><span class="icon-person"></span> ${memList.followcnt}</a>
 										</div>
 										<div>
-											<a><span class="icon-chat"></span> ${memList.rcpcnt}</a>
+											<a href="" title="레시피수"><span class="icon-chat"></span> ${memList.rcpcnt}</a>
 										</div>
 										<div>
-											<a><span class="icon-heartbeat"></span> ${memList.readcnt}</a>
+											<a href="" title="좋아요수"><span class="icon-heartbeat"></span> ${memList.likecnt}</a>
 										</div>
 									</div>
 								</div>

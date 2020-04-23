@@ -242,6 +242,34 @@ a{
     float: left;
     margin-left: 10px;
 }
+.reply{
+    padding: 5px 10px;
+    background: #e6e6e6;
+    color: #000000;
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: .1em;
+    font-weight: 400;
+    border-radius: 4px;
+}
+.reply:hover{
+	color:white;
+	background-color: #82ae46;
+}
+.unreply{
+    padding: 5px 10px;
+    background: #e6e6e6;
+    color: #000000;
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: .1em;
+    font-weight: 400;
+    border-radius: 4px;
+}
+.unreply:hover{
+	color:white;
+	background-color: red;
+}
 </style>
 
 <body>
@@ -271,13 +299,12 @@ a{
 				</c:if>
 				<c:if test="${loginNum!=member.memNum}">
 					<c:if test="${checkFollow==0}">
-					<button onclick="javascript:window:location='<%=request.getContextPath()%>/member/follow?memNum=${member.memNum}'">팔로우</button>
+					<a href="<%=request.getContextPath()%>/member/follow?memNum=${member.memNum}" class="reply">팔로우</a>
 					</c:if>
 				</c:if>
 				<c:if test="${loginNum!=member.memNum}">
-					<c:if test="${checkFollow==1}">
-					팔로우중<br>
-					<button onclick="javascript:window:location='<%=request.getContextPath()%>/member/unFollow?memNum=${member.memNum}'">언팔로우</button>
+					<c:if test="${checkFollow==1}">					
+					<a href="<%=request.getContextPath()%>/member/unFollow?memNum=${member.memNum}" class="unreply">언팔로우</a>
 					</c:if>
 				</c:if>
 			</div>
