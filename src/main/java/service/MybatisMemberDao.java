@@ -34,7 +34,19 @@ public class MybatisMemberDao
             sqlSession.close();
         }
     }
-    
+    public String selectByIdChk(String email) 
+    {
+        SqlSession sqlSession = opendb.getSqlSessionFactory().openSession();
+        try
+        {
+            String statement = namespace + ".selectById";
+            return sqlSession.selectOne(statement, email);
+        }
+        finally
+        {
+            sqlSession.close();
+        }
+    }
     public void insert(Member mem) 
     {
         SqlSession sqlSession = opendb.getSqlSessionFactory().openSession();
@@ -311,4 +323,67 @@ public class MybatisMemberDao
 
 		return scarpList;
 	}
+	
+	/*public void changePwd(String newPwd, String email) throws Exception{
+		SqlSession sqlSession=opendb.getSqlSessionFactory().openSession();
+		String dbpasswd="";
+		int x=-1;
+		Member member=null;
+		try{
+			 String statement = namespace + ".selectById";
+			dbpasswd=sqlSession.selectOne(statement, email);
+			
+			if(dbpasswd.equals(member.getEmail())){
+				sqlSession.update(namespace+".updatepasswd", member.getPasswd());
+				sqlSession.commit();
+				x=1;
+			}else{
+				x=0;
+			}		
+		}finally{
+			sqlSession.close();
+		}
+		//return "";
+	}*/
+	
+	public int changePwd(String newPwd, String email) throws Exception{
+		SqlSession sqlSession=opendb.getSqlSessionFactory().openSession();
+		String dbpasswd="";
+		int x=-1;
+		Member member=null;
+		try{
+			 String statement = namespace + ".selectById";
+	       sqlSession.selectOne(statement, email);
+	            
+	            
+			System.out.println(email);
+		//	dbpasswd=sqlSession.selectOne(namespace+".getPasswd1", member.getEmail());
+		
+			System.out.println(newPwd);
+			
+			String statement1=sqlSession.selectOne(namespace+".getPasswd1", email);
+			System.out.println(statement1);
+			Map map = new HashMap();
+			map.put("email", email);
+			map.put("passwd", newPwd);
+			sqlSession.update(namespace+".updatepasswd", map);
+				//member.setPasswd(newPwd);
+				
+			/*	  Map<String, String> map = new HashMap<String, String>();
+			        map.put("email", email);
+			        map.put("newPwd", newPwd);
+			        sqlSession.update(namespace+".updatepasswd", newPwd);*/
+				/*System.out.println(dbpasswd1);*/
+				sqlSession.commit();
+				x=1;
+			/*}else{
+				x=0;
+			}		*/
+		}finally{
+			sqlSession.close();
+		}
+		return x;
+	}
+	
+	    
 }

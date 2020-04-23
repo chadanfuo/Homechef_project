@@ -55,7 +55,7 @@
 
 				<div class="about-author d-flex p-4 bg-light">
 					<div class="bio align-self-md-center mr-4">
-						<img src="images/person_1.jpg" alt="Image placeholder"
+						<img src="<%=request.getContextPath()%>/images/person_1.jpg" alt="Image placeholder"
 							class="img-fluid mb-4">
 					</div>
 					<div class="desc align-self-md-center">

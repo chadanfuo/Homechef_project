@@ -55,13 +55,56 @@ create table brand_member(
   inquiry varchar(200) ,
   id varchar(50) primary key
 );
+Insert into SCOTT.MEMBER (MEMNUM,EMAIL,NAME,PASSWD,PROFILE,SELFINTRODUCTION) values (4,'1@1.1','1','1','profile.png',null);
+Insert into SCOTT.MEMBER (MEMNUM,EMAIL,NAME,PASSWD,PROFILE,SELFINTRODUCTION) values (6,'123@123.123','버블검','123','6213.png',null);
+Insert into SCOTT.MEMBER (MEMNUM,EMAIL,NAME,PASSWD,PROFILE,SELFINTRODUCTION) values (2,'123@m.com','123','1','profile.png',null);
+Insert into SCOTT.MEMBER (MEMNUM,EMAIL,NAME,PASSWD,PROFILE,SELFINTRODUCTION) values (3,'11@11.11','11','11','profile.png',null);
+Insert into SCOTT.MEMBER (MEMNUM,EMAIL,NAME,PASSWD,PROFILE,SELFINTRODUCTION) values (12,'2@naver.com','2','2','profile.png',null);
+Insert into SCOTT.MEMBER (MEMNUM,EMAIL,NAME,PASSWD,PROFILE,SELFINTRODUCTION) values (5,'2@1.1','핀','2','5unnamed.png',null);
+Insert into SCOTT.MEMBER (MEMNUM,EMAIL,NAME,PASSWD,PROFILE,SELFINTRODUCTION) values (7,'123@1.1','밥차리라','1','7unnamed.png',null);
+Insert into SCOTT.MEMBER (MEMNUM,EMAIL,NAME,PASSWD,PROFILE,SELFINTRODUCTION) values (8,'5@5.5','5','5',null,null);
+Insert into SCOTT.MEMBER (MEMNUM,EMAIL,NAME,PASSWD,PROFILE,SELFINTRODUCTION) values (9,'6@6.6','6','6',null,null);
+Insert into SCOTT.MEMBER (MEMNUM,EMAIL,NAME,PASSWD,PROFILE,SELFINTRODUCTION) values (10,'1@naver.com','밥솥개미','11','1033232.jpg','11');
+Insert into SCOTT.MEMBER (MEMNUM,EMAIL,NAME,PASSWD,PROFILE,SELFINTRODUCTION) values (11,'hjkhkhk','rtwer','wer','profile.png',null);
+Insert into SCOTT.MEMBER (MEMNUM,EMAIL,NAME,PASSWD,PROFILE,SELFINTRODUCTION) values (13,'dbsdlfkdbnm@naver.com','1','1','profile.png',1);
+--alter system kill session 'SESSION_ID,SERIAL_NO';
+
 select * from member;
-ㅇ
+update member set name='제이크' where memnum='1';
+update member set name='핀' where memnum='4';
+update member set passwd =1   where email='dbsdlfkdbnm@naver.com';
+delete member where name='2';
+insert into MEMBER (MEMNUM,EMAIL,NAME,PASSWD,PROFILE,SELFINTRODUCTION) values (2,'2@naver.com','허니허니','2','',1);
+insert into MEMBER (MEMNUM,EMAIL,NAME,PASSWD,PROFILE,SELFINTRODUCTION) values (3,'3@naver.com','저녁노을','3','',1);
+
+
+ commit();
+select email from member where email='2';
+SELECT
+    a.sid,
+    a.serial#,
+    a.status
+FROM
+    v$session a,
+    v$lock b,
+    dba_objects c
+WHERE
+        a.sid = b.sid
+    AND
+        b.id1 = c.object_id
+    AND
+        b.type = 'TM'
+    AND
+        c.object_name = MEMBER;
+
+
+Insert into SCOTT.MEMBER (MEMNUM,EMAIL,NAME,PASSWD,PROFILE,SELFINTRODUCTION) values (4,'1@1.1','1','1','profile.png',null);
+drop table member;
 create table member(
   memNum int UNIQUE,
   email varchar(60) primary key,   
   name varchar(10) not null,   
-  passwd varchar(12) not null,
+  passwd varchar(80) not null,
   profile varchar(50),
   selfIntroduction varchar(200)
 );
@@ -153,4 +196,9 @@ sugar number, --당분
 cal number,  --칼슘
 na number, --나트륨
 chole number --콜레스테롤
+);
+--지영 좋아요
+CREATE TABLE likes(
+rcpnum int,
+memnum int
 );

@@ -68,7 +68,11 @@
 			<artifactId>mail</artifactId>
 			<version>1.4.3</version>
 		</dependency>
-
+<dependency>
+    <groupId>org.apache.commons</groupId>
+    <artifactId>commons-email</artifactId>
+    <version>1.5</version>
+</dependency>
 	</dependencies>
 	<build>
 		<finalName>SpringPj2020</finalName>

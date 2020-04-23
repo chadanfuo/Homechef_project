@@ -6407,6 +6407,10 @@ a.close.disabled {
     .modal-sm {
         max-width: 300px;
     }
+    .modal-dialog.st2 {
+        max-width: 500px;
+        margin: 9.75rem auto;
+    }
 }
 
 @media (min-width: 992px) {

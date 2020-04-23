@@ -35,7 +35,7 @@ import model.Rcp;
 import model.Sale;
 import model.Salecategory;
 import service.BrandRepository;
-import service.MybatisRcpDaoMysql;
+import service.MybatisRcpDao;
 import service.ShoppingRepository;
 import util.JdbcUtil;
 
@@ -47,7 +47,7 @@ public class IndexController {
 	ShoppingRepository shopService;
 	
 	@Autowired
-	MybatisRcpDaoMysql dbPro;
+	MybatisRcpDao dbPro;
 	
 	@ModelAttribute
 	public void initProcess(HttpSession session, Model model) {
@@ -124,14 +124,14 @@ public class IndexController {
 		
 		if (page.getCurrentPage() > page.getPageCount()) { 
 			page.setCurrentPage(page.getPageCount());
-			session.setAttribute("pageNum", page.getCurrentPage());
+			session.setAttribute("pageNum", page.getCurrentPage()); 
 		}
 		page.setStartRow(( page.getCurrentPage()-1 ) * page.getPageSize() + 1 );
 		page.setEndRow(page.getStartRow() + page.getPageSize() - 1);
 		
 		page.setNumber(page.getCount() - (page.getCurrentPage() - 1) * page.getPageSize());
 
-	   	page.setBottomLine(3);
+	   	page.setBottomLine(3); 
 	   	page.setStartPage( 1 + (page.getCurrentPage() - 1) / page.getBottomLine() * page.getBottomLine());
 	   	page.setEndPage(page.getStartPage()+page.getBottomLine() - 1);
    	
@@ -231,7 +231,7 @@ public class IndexController {
 		// 메일 관련 정보 
 		String host = "smtp.naver.com"; 
 		final String username = "dbsdlfkdbnm"; //네이버 이메일 주소중 @ naver.com앞주소만 기재합니다.
-		final String password = "비번"; //네이버 이메일 비밀번호를 기재합니다.
+		final String password = "dudalsdlfkd8693"; //네이버 이메일 비밀번호를 기재합니다.
 		int port=465; // 메일 내용
 		String recipient = email; //메일을 발송할 이메일 주소를 기재해 줍니다. 
 		String subject = "안녕하세요 홈쉐프입니다."; 

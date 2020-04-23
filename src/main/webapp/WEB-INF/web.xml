@@ -37,5 +37,13 @@
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
 
+<context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>
+            classpath:spring/application-config.xml
+            classpath:spring/email/email-config.xml
+        </param-value>
+  </context-param>
+
 
 </web-app>

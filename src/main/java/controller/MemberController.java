@@ -18,6 +18,8 @@ import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
@@ -30,7 +32,7 @@ import model.Rcp;
 import model.Scrap;
 import model.User;
 import service.MybatisMemberDao;
-import service.MybatisRcpDaoMysql;
+import service.MybatisRcpDao;
 import util.JdbcUtil;
 
 @Controller
@@ -39,7 +41,7 @@ public class MemberController {
 	@Autowired
 	MybatisMemberDao dbPro;
 	@Autowired
-	MybatisRcpDaoMysql dbPro2;
+	MybatisRcpDao dbPro2;
 
 	@ModelAttribute
 	public void initProcess(Model m){
@@ -292,5 +294,48 @@ public class MemberController {
 
 		return "redirect:/rcp/content?rcpnum="+scrapnum;
 	}
+	// 아이디이메일 중복 체크
+		@RequestMapping(value = "/emailCheck", method = RequestMethod.POST)
+		public @ResponseBody String AjaxView(@RequestParam("email") String email) {
+			String str = "";
+			String emailCheck = dbPro.selectByIdChk(email);
+			if (emailCheck != null) { // 이미 존재하는 계정
+				str = "NO";
+			} else { // 사용 가능한 계정
+				str = "YES";
+			}
+			return str;
+		}
+	
+	@RequestMapping(value = "/findPwd", method = RequestMethod.POST)
+	//@ResponseBody
+	public String findPwd( String email,   String inputCode, HttpSession session,Model m) throws Exception {
+	    String keyCode = (String) session.getAttribute("keyCode");
+/*        
+	    if (!inputCode.equals(keyCode)) {
+	        return "discordance";
+	    }
+	        */
+	   // session.removeAttribute("keyCode");
+	        
+	    String newPwd = FindUtil.getNewPwd();
+	    dbPro.changePwd(newPwd, email);
+	    
+	    m.addAttribute("newPwd", newPwd);
 
+	    session.getAttribute("newPwd");
+	    
+	    String subject = "[MIN-HA!] 임시 비밀번호 발급 안내";
+	        
+	    String msg = "";
+	    msg += "<div align='center' style='border:1px solid black; font-family:verdana'>";
+	    msg += "<h3 style='color: blue;'><strong>" + email;
+	    msg += "님</strong>의 임시 비밀번호 입니다. 로그인 후 비밀번호를 변경하세요.</h3>";
+	    msg += "<p>임시 비밀번호 : <strong>" + newPwd + "</strong></p></div>";
+	        
+	    MailUtil.sendMail(email, subject, msg);
+	    m.addAttribute("mssg", "이메일전송 되었습니다.");
+	    return "/member/loginForm";
+	}
+	
 }
